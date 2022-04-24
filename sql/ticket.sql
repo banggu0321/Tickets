@@ -111,24 +111,29 @@ UPDATE PERFORMANCE SET per_seat=12 WHERE per_no = 1;
 DELETE FROM PERFORMANCE WHERE per_no = 1;
 
 --main페이지
+		--@@작업을 선택하세요>>
 --1. 회원가입
 INSERT INTO MEMBER VALUES('id','pw','김','aa','101');
 INSERT INTO MEMBER VALUES('id2','pw','김','aa','101');
 --2. 로그인(success,fail)
-SELECT M_ID FROM MEMBER WHERE M_ID ='id';--id:static/변수으로 빼놓기
---3. 공연조회(제목별, 카테고리별, 전체조회->>관심등록 --뒤로가기While)
+SELECT M_ID FROM MEMBER WHERE M_ID ='id' AND M_PW ='pw';
+		--@@.JAVA id->static/변수으로 빼놓기(String user_id = null)
+		--@@[알림] **님 로그인되었습니다.
+		--@@[알림] 회원이 존재하지 않습니다.
+
+--3. 공연조회:제목별으로 검색, 카테고리별, 전체조회->>관심등록 --뒤로가기While
 SELECT * FROM PERFORMANCE WHERE per_title = '공연명' AND PER_DATE > sysdate ORDER BY PER_DATE ;
 SELECT * FROM PERFORMANCE WHERE per_category = '뮤지컬' AND PER_DATE > sysdate ORDER BY PER_DATE ;
 SELECT * FROM PERFORMANCE WHERE per_category = '콘서트' AND PER_DATE > sysdate ORDER BY PER_DATE ;
 SELECT * FROM PERFORMANCE WHERE per_category = '연극' AND PER_DATE > sysdate ORDER BY PER_DATE ;
 SELECT * FROM PERFORMANCE WHERE per_category = '클래식' AND PER_DATE > sysdate ORDER BY PER_DATE ;
 SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_DATE;
+		--@@syso>[알림]로그인이 필요합니다.
+		--@@syso>wishlist에 담을 공연의 번호를 입력하세요
 
---syso>wishlist에 담을 공연의 번호를 입력하세요
---이미 wishlist에 담겨있을경우 (m_id = 어쩌구 && per_no=해당 && wish_see = 'N') > [알림]이미 담겨있습니다.
-----wishlist 담겨있지만 wish_see = 'Y' 인 경우 > [알림]추가되었습니다. -> wish_see = 'N'로 바꾸기
-----wishlist 담겨있지 않을경우 > [알림]추가되었습니다.
---> 중복 추가하도록 변경 && per_no = 1 && wish_see = 'N'
+--wishlist 담겨있지만 wish_see = 'Y' 인 경우 > @@[알림]추가되었습니다.
+--wishlist 담겨있지 않을경우 > @@[알림]추가되었습니다.
+--중복으로 값 들어가지 않게 -> m_id = 어쩌구 && per_no = 해당 && wish_see = 'N' 가 아닌 경우만 insert
 INSERT INTO WISHLIST
 SELECT seq_wishno.nextval, 'id','10', 'N'
 FROM dual
@@ -140,37 +145,42 @@ WHERE NOT EXISTS (
 	AND wish_see ='N');
 SELECT * FROM WISHLIST w2;
 
---4. 예매하기 (해당 회원의 관심목록 출력) --<**님의 wishlist> OR [알림]wishlist가 비었습니다. 조회후 wish 등록해주세요
+--4. 예매하기 (해당 회원의 관심목록 출력)  w.M_ID->string 값으로 가지고 다니기
+		--@@<**님의 wishlist> OR [알림]wishlist가 비었습니다. 조회 후 wish 등록해주세요 ->뒤로가기
 SELECT w.M_ID, w.WISH_NO "공연넘버(NO)", p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
 FROM WISHLIST w JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
 WHERE M_ID = 'id' 
 AND WISH_SEE ='N';
-----1.예매하기 (N만 가능함)->공연넘버(NO) 선택하세요
+----1.예매하기 (N만 가능함)		-
+		--@@공연넘버(NO) 선택하세요 
 INSERT INTO TICKET VALUES(seq_ticno.nextval, 166, sysdate);
 UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE per_no = 10;
 UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166;
+		--@@[알림]예매가 완료되었습니다.
 ----2.뒤로가기while
 --5. 마이페이지
 ----1.개인정보수정(비밀번호만)
 UPDATE MEMBER SET m_pw='pw2' WHERE m_id ='id';
+		--@@[알림] 비밀번호가 수정되었습니다.
 ----2.예매확인 - 조회
-SELECT t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
+		--@@<**님의 예매 내역>  w.M_ID->string 값으로 가지고 다니기
+SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id';
 --2.예매취소 - 삭제
---syso>> 예매 취소는 공연 당일의 전날까지만 가능합니다. \n [취소 가능한 예매내역]
+		--@@syso>> 예매 취소는 공연 당일의 전날까지만 가능합니다. \n [취소 가능한 예매내역]
 SELECT t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id'
 AND p.per_date - 1 > sysdate;
---syso>>예매번호입력하세요
+		--syso>>예매번호입력하세요
 DELETE FROM TICKET WHERE tic_no = 3;
 ----3.관심목록조회
 SELECT * FROM WISHLIST WHERE M_ID = 'id';
 ----4.로그아웃 id=null
-----5.탈퇴(예매내역 있으면 탈퇴불가)>[알림]탈퇴할 수 없습니다.
+----5.탈퇴(예매내역 있으면 탈퇴불가)	>@@[알림]탈퇴할 수 없습니다.
 SELECT t.TIC_NO, p.PER_DATE
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
