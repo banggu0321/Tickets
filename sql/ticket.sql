@@ -20,9 +20,9 @@ SELECT * FROM USER_CONSTRAINTS ;
 
 --제약조건 기록 삭제
 purge recycleBIN;
+
 --===테이블 생성=================================
 --Member
-DROP TABLE MEMBER cascade constraint;
 CREATE TABLE MEMBER(
 	m_id varchar2(20) CONSTRAINT member_id_pk PRIMARY KEY,
 	m_pw varchar2(20) CONSTRAINT member_pw_ck NOT NULL,
@@ -30,10 +30,8 @@ CREATE TABLE MEMBER(
 	m_email VARCHAR2(25) CONSTRAINT member_email_ck NOT NULL ,
 	m_phone VARCHAR2(15)
 );
-SELECT * FROM "MEMBER" m;
 
 --Performance
-DROP TABLE performance cascade constraint;
 CREATE TABLE PERFORMANCE(
 	per_no NUMBER PRIMARY KEY,
 	per_title VARCHAR2(20) NOT NULL,
@@ -46,10 +44,8 @@ CREATE TABLE PERFORMANCE(
 	per_seat NUMBER NOT null,
  	constraint per_category_ck check(per_category in ('뮤지컬','콘서트','연극', '클래식'))
 );
-SELECT * FROM PERFORMANCE ;
 
 --Wishlist
-DROP TABLE wishlist cascade CONSTRAINT ;
 CREATE TABLE WISHLIST(
 	wish_no NUMBER PRIMARY KEY,
 	m_id VARCHAR2(20) ,
@@ -60,17 +56,26 @@ CREATE TABLE WISHLIST(
 	constraint wish_per_no_fk foreign key(per_no) references PERFORMANCE(per_no) ON DELETE CASCADE
 );
 ALTER TABLE WISHLIST ADD UNIQUE (m_id,per_no);
-SELECT * FROM wishlist;
 
 --Ticket
-DROP TABLE ticket cascade CONSTRAINT ;
 CREATE TABLE TICKET(
 	tic_no NUMBER PRIMARY KEY,
 	wish_no NUMBER,
 	tic_date DATE ,
 	constraint tic_wish_no_fk foreign key(wish_no) references wishlist(wish_no) ON DELETE CASCADE
 );
+
+--테이블 조회
+SELECT * FROM "MEMBER" m;
+SELECT * FROM PERFORMANCE ;
+SELECT * FROM wishlist;
 SELECT * FROM ticket;
+
+--테이블 삭제
+DROP TABLE MEMBER cascade constraint;
+DROP TABLE performance cascade constraint;
+DROP TABLE wishlist cascade CONSTRAINT ;
+DROP TABLE ticket cascade CONSTRAINT ;
 
 
 --===시퀀스 생성=================================
@@ -79,6 +84,7 @@ CREATE SEQUENCE SEQ_PERNO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE SEQ_TICNO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE SEQ_WISHNO INCREMENT BY 1 START WITH 1;
 
+--시퀀스 삭제
 DROP SEQUENCE SEQ_PERNO;
 DROP SEQUENCE SEQ_TICNO;
 DROP SEQUENCE SEQ_WISHNO;
@@ -87,7 +93,7 @@ DROP SEQUENCE SEQ_WISHNO;
 --===JDBC프로그램 SQL작성=================================
 --관리자 아이디 비번 설정
 --INSERT INTO MEMBER VALUES('admin','admin1234','관리자','admin@gmai.com','010-1234-5678');
---관리하기
+--관리하기(다른 sql파일 만들기)
 --1.조회(공연,  회원, 예매) ->전체조회
 SELECT * FROM PERFORMANCE;
 SELECT * FROM MEMBER;
@@ -107,7 +113,7 @@ DELETE FROM PERFORMANCE WHERE per_no = 1;
 --main페이지
 --1. 회원가입
 INSERT INTO MEMBER VALUES('id','pw','김','aa','101');
-INSERT INTO MEMBER VALUES('id2','pw','김','aa','101'); vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+INSERT INTO MEMBER VALUES('id2','pw','김','aa','101');
 --2. 로그인(success,fail)
 SELECT M_ID FROM MEMBER WHERE M_ID ='id';--id:static/변수으로 빼놓기
 --3. 공연조회(제목별, 카테고리별, 전체조회->>관심등록 --뒤로가기While)
@@ -159,7 +165,7 @@ FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id'
 AND p.per_date - 1 > sysdate;
-	--syso>>예매번호입력하세요
+--syso>>예매번호입력하세요
 DELETE FROM TICKET WHERE tic_no = 3;
 ----3.관심목록조회
 SELECT * FROM WISHLIST WHERE M_ID = 'id';
