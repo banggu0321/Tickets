@@ -11,10 +11,10 @@ public class DBUtil {
 		Connection conn = null;
 
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String userid = "tickets", password = "0321";
+		String userid = "TICKETS", password = "0321";
 
 		try {
-			Class.forName("oracle.jdbc.OracleDriver");
+			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection(url, userid, password);
 
 		} catch (ClassNotFoundException e) {
