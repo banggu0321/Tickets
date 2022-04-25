@@ -16,7 +16,7 @@ public class TicketService {
 		return ticketDAO.memberInsert(mem);
 	}
 	//2. 로그인
-	public List<MemberVO> memberLogIn(String mem_id, String mem_pw) {
+	public MemberVO memberLogIn(String mem_id, String mem_pw) {
 		return ticketDAO.memberLogIn(mem_id, mem_pw);
 	}
 	//3. 공연조회

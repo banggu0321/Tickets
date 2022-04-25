@@ -1,5 +1,9 @@
 package com.project.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.project.dto.MemberVO;
@@ -8,75 +12,141 @@ import com.project.dto.TicketVO;
 import com.project.dto.TicketWishPerVO;
 import com.project.dto.WishPerVO;
 import com.project.dto.WishlistVO;
+import com.project.util.DBUtil;
 
 public class TicketDAO {
-	//1. È¸¿ø°¡ÀÔ
+	Connection conn;
+	PreparedStatement pst;
+	ResultSet rs;
+
+	static final String SQL_MEM_INSERT = "INSERT INTO MEMBER VALUES(?,?,?,?,?)";
+	static final String SQL_MEM_LOGIN = "SELECT * FROM MEMBER WHERE M_ID =? AND M_PW =?";
+	//static final String SQL_MEM_INSERT = "INSERT INTO MEMBER VALUES(?,?,?,?,?)";
+
+	
+	// 1. íšŒì›ê°€ì…
 	public int memberInsert(MemberVO mem) {
-		return 0;
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_MEM_INSERT);
+			pst.setString(1, mem.getM_id());
+			pst.setString(2, mem.getM_pw());
+			pst.setString(3, mem.getM_name());
+			pst.setString(4, mem.getM_email());
+			pst.setString(5, mem.getM_phone());
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("âŒì´ë¯¸ ì¡´ì¬í•˜ëŠ” ì•„ì´ë””ê±°ë‚˜ ì–‘ì‹ì— ë§ì§€ ì•ŠìŠµë‹ˆë‹¤.âŒ");
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
-	//2. ·Î±×ÀÎ
-	public List<MemberVO> memberLogIn(String mem_id, String mem_pw) {
-		return null;
+
+	// 2. ë¡œê·¸ì¸
+	public MemberVO memberLogIn(String mem_id, String mem_pw) {
+		MemberVO mem = null;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_MEM_LOGIN);
+			pst.setString(1, mem_id);
+			pst.setString(2, mem_pw);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				mem = memInfo(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return mem;
 	}
-	//3. °ø¿¬Á¶È¸
-	//3-1. Á¦¸ñº° Á¶È¸
+
+	private MemberVO memInfo(ResultSet rs) throws SQLException {
+		MemberVO mem = new MemberVO();
+		mem.setM_id(rs.getString("M_ID"));
+		mem.setM_pw(rs.getString("M_PW"));
+		mem.setM_name(rs.getString("M_NAME"));
+		mem.setM_email(rs.getString("M_EMAIL"));
+		mem.setM_phone(rs.getString("M_PHONE"));
+		return mem;
+	}
+
+	// 3. ê³µì—°ì¡°íšŒ
+	// 3-1. ì œëª©ë³„ ì¡°íšŒ
 	public List<PerformanceVO> selectPer_Title(String title) {
 		return null;
 	}
-	//3-2. Ä«Å×°í¸®º° Á¶È¸
+
+	// 3-2. ì¹´í…Œê³ ë¦¬ë³„ ì¡°íšŒ
 	public List<PerformanceVO> selectPer_Cat(String category) {
 		return null;
 	}
-	//3-3. ÀüÃ¼ Á¶È¸
+
+	// 3-3. ì „ì²´ ì¡°íšŒ
 	public List<PerformanceVO> selectAll() {
 		return null;
 	}
-	//3-4. °ü½É¸®½ºÆ® Ãß°¡
+
+	// 3-4. ê´€ì‹¬ë¦¬ìŠ¤íŠ¸ ì¶”ê°€
 	public int wishlistInsert(WishlistVO wish) {
 		return 0;
 	}
-	//4. ¿¹¸ÅÇÏ±â
-	//4-1. ¿¹¸Å°¡´É °ü½É¸®½ºÆ® Á¶È¸ WishPerVO
+
+	// 4. ì˜ˆë§¤í•˜ê¸°
+	// 4-1. ì˜ˆë§¤ê°€ëŠ¥ ê´€ì‹¬ë¦¬ìŠ¤íŠ¸ ì¡°íšŒ WishPerVO
 	public List<WishPerVO> selectWish_Forbuy(String id) {
 		return null;
 	}
-	//4-2. insert, update(ÁÂ¼®-1, See->Y)
+
+	// 4-2. insert, update(ì¢Œì„-1, See->Y)
 	public int ticketInsert(TicketVO ticket) {
 		return 0;
 	}
+
 	public int ticSeatUpdate(PerformanceVO tic_seat) {
 		return 0;
 	}
+
 	public int ticWishUpdate(WishlistVO tic_wish) {
 		return 0;
 	}
-	//5. ¸¶ÀÌÆäÀÌÁö
-	//5-1. ºñ¹Ğ¹øÈ£ ¼öÁ¤ (id´Ù½ÃÀÔ·Â)
+
+	// 5. ë§ˆì´í˜ì´ì§€
+	// 5-1. ë¹„ë°€ë²ˆí˜¸ ìˆ˜ì • (idë‹¤ì‹œì…ë ¥)
 	public int pwUpdate(MemberVO mem) {
 		return 0;
 	}
-	//5-2. ¿¹¸Å È®ÀÎ
+
+	// 5-2. ì˜ˆë§¤ í™•ì¸
 	public List<TicketWishPerVO> selectTicketBuy(String id) {
 		return null;
 	}
-	//5-3. ¿¹¸Å Ãë¼Ò -> °¡´É Á¶È¸
+
+	// 5-3. ì˜ˆë§¤ ì·¨ì†Œ -> ê°€ëŠ¥ ì¡°íšŒ
 	public List<TicketWishPerVO> selectTicketDel(String id) {
 		return null;
 	}
-	//5-3. ¿¹¸Å delete
+
+	// 5-3. ì˜ˆë§¤ delete
 	public int ticketDelete(int ticNum) {
 		return 0;
 	}
-	//5-4. °ü½É¸®½ºÆ® Á¶È¸
+
+	// 5-4. ê´€ì‹¬ë¦¬ìŠ¤íŠ¸ ì¡°íšŒ
 	public List<WishPerVO> selectWish_mypage(String id) {
 		return null;
 	}
-	//5-5. ·Î±×¾Æ¿ô==?
-	//5-6. Å»Åğ °¡´É È®ÀÎ
+
+	// 5-5. ë¡œê·¸ì•„ì›ƒ==?
+	// 5-6. íƒˆí‡´ ê°€ëŠ¥ í™•ì¸
 	public List<TicketWishPerVO> selectMemDel(String id) {
 		return null;
 	}
-	//5-6. delete member
+
+	// 5-6. delete member
 	public int memberDelete(int mem_id) {
 		return 0;
 	}
