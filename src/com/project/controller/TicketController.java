@@ -22,8 +22,25 @@ public class TicketController {
 			case 4: break;//memberLogIn(); break;
 			case 5: break;//memberLogIn(); break;
 			case 6: mainFlag = false;
+			case 31: selectPer_Title(); break; //조회안됨..
+			case 32: selectPer_Cat(); break;
+			case 33: selectAll(); break;
 			}
 		}
+	}
+
+	private static void selectPer_Title() {
+		System.out.print("제목별 검색>> ");
+		TicketView.printPer(service.selectPer_Title(sc.next()));
+	}
+
+	private static void selectPer_Cat() {
+		System.out.print("카테고리별 검색>> ");
+		TicketView.printPer(service.selectPer_Cat(sc.next()));
+	}
+
+	private static void selectAll() {
+		TicketView.printPer(service.selectAll());
 	}
 
 	private static int displayMain() {
@@ -54,7 +71,6 @@ public class TicketController {
 		int result = service.memberInsert(mem);
 		System.out.println(result>0 ? 
 				"[알림]회원가입 되었습니다.":"[알림]회원가입 실패");
-		System.out.println();
 	}
 
 	private static void memberLogIn() {
@@ -62,7 +78,7 @@ public class TicketController {
 		id = sc.next();
 		System.out.print("PASSWORD : ");
 		String pw = sc.next();
-		TicketView.printID(service.memberLogIn(id,pw));
+		TicketView.printLogIn(service.memberLogIn(id,pw));
 		System.out.println();
 	}
 }

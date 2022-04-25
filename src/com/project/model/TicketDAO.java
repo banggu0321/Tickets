@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.project.dto.MemberVO;
@@ -21,7 +22,9 @@ public class TicketDAO {
 
 	static final String SQL_MEM_INSERT = "INSERT INTO MEMBER VALUES(?,?,?,?,?)";
 	static final String SQL_MEM_LOGIN = "SELECT * FROM MEMBER WHERE M_ID =? AND M_PW =?";
-	//static final String SQL_MEM_INSERT = "INSERT INTO MEMBER VALUES(?,?,?,?,?)";
+	static final String SQL_SELECT_TITLE = "SELECT * FROM PERFORMANCE WHERE per_title = ? AND PER_DATE > sysdate ORDER BY PER_DATE";
+	static final String SQL_SELECT_CAT = "SELECT * FROM PERFORMANCE WHERE per_category = ? AND PER_DATE > sysdate ORDER BY PER_DATE";
+	static final String SQL_SELECT_ALL = "SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_DATE";
 
 	
 	// 1. 회원가입
@@ -75,19 +78,74 @@ public class TicketDAO {
 	}
 
 	// 3. 공연조회
+	private PerformanceVO perlist(ResultSet rs) throws SQLException {
+		PerformanceVO per = new PerformanceVO();
+		per.setPer_no(rs.getInt("PER_NO"));
+		per.setPer_title(rs.getString("PER_TITLE"));
+		per.setPer_location(rs.getString("PER_LOCATION"));
+		per.setPer_date(rs.getDate("PER_DATE"));
+		per.setPer_time(rs.getString("PER_TIME"));
+		per.setPer_price(rs.getString("PER_PRICE"));
+		per.setPer_cast(rs.getString("PER_CAST"));
+		per.setPer_category(rs.getString("PER_CATEGORY"));
+		per.setPer_seat(rs.getInt("PER_SEAT"));
+		return per;
+	}
+
 	// 3-1. 제목별 조회
 	public List<PerformanceVO> selectPer_Title(String title) {
-		return null;
+		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_TITLE);
+			pst.setString(1, title);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				perlist.add(perlist(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return perlist;
 	}
 
 	// 3-2. 카테고리별 조회
 	public List<PerformanceVO> selectPer_Cat(String category) {
-		return null;
+		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_CAT);
+			pst.setString(1, category);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				perlist.add(perlist(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return perlist;
 	}
 
 	// 3-3. 전체 조회
 	public List<PerformanceVO> selectAll() {
-		return null;
+		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_ALL);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				perlist.add(perlist(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return perlist;
 	}
 
 	// 3-4. 관심리스트 추가
