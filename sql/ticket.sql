@@ -159,8 +159,8 @@ UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166;
 		--@@[알림]예매가 완료되었습니다.
 ----2.뒤로가기while
 --5. 마이페이지
-----1.개인정보수정(비밀번호만)
-UPDATE MEMBER SET m_pw='pw2' WHERE m_id ='id';
+----1.개인정보수정(비밀번호만)- id 다시입력
+UPDATE MEMBER SET m_pw='pw2' WHERE m_id ='id' AND 'id' = 'id';
 		--@@[알림] 비밀번호가 수정되었습니다.
 ----2.예매확인 - 조회
 		--@@<**님의 예매 내역>  w.M_ID->string 값으로 가지고 다니기
