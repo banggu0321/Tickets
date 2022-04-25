@@ -13,9 +13,4 @@ public class TicketView {
 		System.out.println();
 		return null;
 	}
-
-	public static void print(String message) {
-		System.out.println("****¾Ë¸²*************");
-		System.out.println(message);
-	}
 }
