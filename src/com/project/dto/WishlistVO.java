@@ -6,6 +6,20 @@ public class WishlistVO {
 	private int per_no ;
 	private String wish_see ;
 	
+	public WishlistVO() {}
+
+	public WishlistVO(int per_no) {
+		super();
+		this.per_no = per_no;
+	}
+	
+	public WishlistVO(int wish_no, String m_id, int per_no, String wish_see) {
+		super();
+		this.wish_no = wish_no;
+		this.m_id = m_id;
+		this.per_no = per_no;
+		this.wish_see = wish_see;
+	}
 	public int getWish_no() {
 		return wish_no;
 	}
@@ -37,4 +51,5 @@ public class WishlistVO {
 				.append(per_no).append(", wish_see=").append(wish_see).append("]");
 		return builder.toString();
 	}
+	
 }

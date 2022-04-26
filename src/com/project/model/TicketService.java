@@ -48,11 +48,14 @@ public class TicketService {
 	public int ticketInsert(TicketVO ticket) {
 		return ticketDAO.ticketInsert(ticket);
 	}
-	public int ticSeatUpdate(PerformanceVO tic_seat) {
-		return ticketDAO.ticSeatUpdate(tic_seat);
+	public int ticSeatSelect(WishlistVO tic_seat, int wish_no) {
+		return ticketDAO.ticSeatSelect(tic_seat, wish_no);
 	}
-	public int ticWishUpdate(WishlistVO tic_wish) {
-		return ticketDAO.ticWishUpdate(tic_wish);
+	public int ticSeatUpdate(PerformanceVO tic_seat, int per_no) {
+		return ticketDAO.ticSeatUpdate(tic_seat, per_no);
+	}
+	public int ticWishUpdate(WishlistVO tic_wish, int wish_no) {
+		return ticketDAO.ticWishUpdate(tic_wish, wish_no);
 	}
 	//5. 마이페이지
 	//5-1. 비밀번호 수정 (id다시입력)

@@ -3,6 +3,7 @@ package com.project.controller;
 import java.util.Scanner;
 
 import com.project.dto.MemberVO;
+import com.project.dto.TicketVO;
 import com.project.dto.WishlistVO;
 import com.project.model.TicketService;
 import com.project.view.TicketView;
@@ -11,6 +12,7 @@ public class TicketController {
 	static TicketService service = new TicketService();
 	static Scanner sc = new Scanner(System.in);
 	static String id = "id";
+	static int wish_no = 182;
 	
 	public static void main(String[] args) {
 		boolean mainFlag = true;
@@ -25,14 +27,22 @@ public class TicketController {
 			case 33: selectAll(); break;
 			case 34: wishlistInsert(); break;
 			case 4: wishForBuy(); break; //ticketS1();ticketS2();ticketS3();
+			case 41: ticketInsert(); break;
+			case 42: ticSeatUpdate(); break;
+			case 43: ticWishUpdate(); break;
 			case 5: break;//memberLogIn(); break;
 			case 6: mainFlag = false;
 			}
 		}
 	}
 
-	private static void wishForBuy() {
-		TicketView.printWishForBuy(service.selectWish_Forbuy(id));
+	private static void ticketInsert() {
+		TicketVO ticket = new TicketVO();
+		System.out.print("공연 넘버(NO)>>");
+		wish_no = sc.nextInt();
+		ticket.setWish_no(wish_no);
+		int result = service.ticketInsert(ticket);
+		System.out.println(result>0 ? "INSERT SUCCESS":"INSERT FAIL");
 	}
 
 	private static void wishlistInsert() {
@@ -50,18 +60,17 @@ public class TicketController {
 		}
 	}
 
-	private static void selectPer_Title() {
-		System.out.print("제목별 검색>> ");
-		TicketView.printPer(service.selectPer_Title(sc.next()));
+	private static void ticSeatUpdate() {
+		WishlistVO wishlist = new WishlistVO();
+		int per_no = service.ticSeatSelect(wishlist, wish_no);
+		System.out.println(per_no);
 	}
 
-	private static void selectPer_Cat() {
-		System.out.print("카테고리별 검색>> ");
-		TicketView.printPer(service.selectPer_Cat(sc.next()));
-	}
-
-	private static void selectAll() {
-		TicketView.printPer(service.selectAll());
+	private static void ticWishUpdate() {
+		WishlistVO wishlist = new WishlistVO();
+		int result = service.ticWishUpdate(wishlist, wish_no);
+		System.out.println(result>0 ? "UPDATE SUCCESS":"UPDATE FAIL");
+		System.out.println();
 	}
 
 	private static int displayMain() {
@@ -93,7 +102,6 @@ public class TicketController {
 		System.out.println(result>0 ? 
 				"[알림]회원가입 되었습니다.":"[알림]회원가입 실패");
 	}
-
 	private static void memberLogIn() {
 		System.out.print("ID : ");
 		id = sc.next();
@@ -101,5 +109,19 @@ public class TicketController {
 		String pw = sc.next();
 		TicketView.printLogIn(service.memberLogIn(id, pw));
 		System.out.println();
+	}
+	private static void selectPer_Title() {
+		System.out.print("제목별 검색>> ");
+		TicketView.printPer(service.selectPer_Title(sc.next()));
+	}
+	private static void selectPer_Cat() {
+		System.out.print("카테고리별 검색>> ");
+		TicketView.printPer(service.selectPer_Cat(sc.next()));
+	}
+	private static void selectAll() {
+		TicketView.printPer(service.selectAll());
+	}
+	private static void wishForBuy() {
+		TicketView.printWishForBuy(service.selectWish_Forbuy(id));
 	}
 }

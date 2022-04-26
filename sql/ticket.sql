@@ -136,13 +136,13 @@ SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_DATE;
 --wishlist 담겨있지 않을경우 > @@[알림]추가되었습니다.
 --중복으로 값 들어가지 않게 -> m_id = 어쩌구 && per_no = 해당 && wish_see = 'N' 가 아닌 경우만 insert
 INSERT INTO WISHLIST
-SELECT seq_wishno.nextval, 'id','10', 'N'
+SELECT seq_wishno.nextval, 'id','13', 'N'
 FROM dual
 WHERE NOT EXISTS (
 	SELECT M_ID , PER_NO , WISH_SEE 
 	FROM WISHLIST
 	WHERE m_id = 'id'
-	AND per_no = '10'
+	AND per_no = '13'
 	AND wish_see ='N');
 --분리해서 조건검색 후 result 값으로 조건문 만듬
 SELECT M_ID , PER_NO , WISH_SEE 
@@ -164,7 +164,14 @@ AND w.WISH_SEE ='N';
 ----1.예매하기 (N만 가능함)		-
 		--@@공연넘버(NO) 선택하세요 
 INSERT INTO TICKET VALUES(seq_ticno.nextval, 166, sysdate);
-UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE per_no = 10;
+--관심번호를 가지고 per_no가져와야함..--1
+UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = 11;
+
+SELECT w.per_no
+FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO 
+WHERE t.WISH_NO = 174;
+
+--관심번호가지고 와야함--2
 UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166;
 		--@@[알림]예매가 완료되었습니다.
 ----2.뒤로가기while
