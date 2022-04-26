@@ -3,6 +3,7 @@ package com.project.controller;
 import java.util.Scanner;
 
 import com.project.dto.MemberVO;
+import com.project.dto.PerformanceVO;
 import com.project.dto.TicketVO;
 import com.project.dto.WishlistVO;
 import com.project.model.TicketService;
@@ -12,7 +13,7 @@ public class TicketController {
 	static TicketService service = new TicketService();
 	static Scanner sc = new Scanner(System.in);
 	static String id = "id";
-	static int wish_no = 182;
+	static int wish_no = 181;
 	
 	public static void main(String[] args) {
 		boolean mainFlag = true;
@@ -35,43 +36,14 @@ public class TicketController {
 			}
 		}
 	}
-
-	private static void ticketInsert() {
-		TicketVO ticket = new TicketVO();
-		System.out.print("공연 넘버(NO)>>");
-		wish_no = sc.nextInt();
-		ticket.setWish_no(wish_no);
-		int result = service.ticketInsert(ticket);
-		System.out.println(result>0 ? "INSERT SUCCESS":"INSERT FAIL");
-	}
-
-	private static void wishlistInsert() {
-		WishlistVO wishlist = new WishlistVO();
-		System.out.print("Per_no : ");
-		int per_no = sc.nextInt();
-		int result = service.wishlistInsertSearch(wishlist, id, per_no);
-		if(result == 0) {
-			wishlist.setM_id(id);
-			wishlist.setPer_no(per_no);
-			int insert = service.wishlistInsert(wishlist);
-			System.out.println(insert>0 ? "[알림]success ":"[알림]실패");
-		}else {
-			System.out.println("Wishlist에 존재하는 공연입니다.");
-		}
-	}
-
 	private static void ticSeatUpdate() {
-		WishlistVO wishlist = new WishlistVO();
-		int per_no = service.ticSeatSelect(wishlist, wish_no);
+		PerformanceVO perlist = new PerformanceVO();
+		int per_no = service.ticSeatSelect(wish_no);
 		System.out.println(per_no);
+		int update = service.ticSeatUpdate(perlist, per_no);
+		System.out.println(update>0 ? "[알림]success ":"[알림]실패");
 	}
 
-	private static void ticWishUpdate() {
-		WishlistVO wishlist = new WishlistVO();
-		int result = service.ticWishUpdate(wishlist, wish_no);
-		System.out.println(result>0 ? "UPDATE SUCCESS":"UPDATE FAIL");
-		System.out.println();
-	}
 
 	private static int displayMain() {
 		System.out.println("|TICKET PROGRAM|===================================");
@@ -123,5 +95,34 @@ public class TicketController {
 	}
 	private static void wishForBuy() {
 		TicketView.printWishForBuy(service.selectWish_Forbuy(id));
+	}
+	private static void wishlistInsert() {
+		WishlistVO wishlist = new WishlistVO();
+		System.out.print("Per_no : ");
+		int per_no = sc.nextInt();
+		int result = service.wishlistInsertSearch(wishlist, id, per_no);
+		if(result == 0) {
+			wishlist.setM_id(id);
+			wishlist.setPer_no(per_no);
+			int insert = service.wishlistInsert(wishlist);
+			System.out.println(insert>0 ? "[알림]success ":"[알림]실패");
+		}else {
+			System.out.println("Wishlist에 존재하는 공연입니다.");
+		}
+	}
+	private static void ticketInsert() {
+		TicketVO ticket = new TicketVO();
+		System.out.print("공연 넘버(NO)>>");
+		wish_no = sc.nextInt();
+		ticket.setWish_no(wish_no);
+		int result = service.ticketInsert(ticket);
+		System.out.println(result>0 ? "INSERT SUCCESS":"INSERT FAIL");
+	}
+	//updateSeat
+	private static void ticWishUpdate() {
+		WishlistVO wishlist = new WishlistVO();
+		int result = service.ticWishUpdate(wishlist, wish_no);
+		System.out.println(result>0 ? "UPDATE SUCCESS":"UPDATE FAIL");
+		System.out.println();
 	}
 }

@@ -48,8 +48,8 @@ public class TicketService {
 	public int ticketInsert(TicketVO ticket) {
 		return ticketDAO.ticketInsert(ticket);
 	}
-	public int ticSeatSelect(WishlistVO tic_seat, int wish_no) {
-		return ticketDAO.ticSeatSelect(tic_seat, wish_no);
+	public int ticSeatSelect(int wish_no) {
+		return ticketDAO.ticSeatSelect( wish_no);
 	}
 	public int ticSeatUpdate(PerformanceVO tic_seat, int per_no) {
 		return ticketDAO.ticSeatUpdate(tic_seat, per_no);

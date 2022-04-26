@@ -37,8 +37,8 @@ public class TicketDAO {
 	static final String SQL_TICKET_SELECT_PER = 
 					"SELECT w.per_no"
 					+ " FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO"
-					+ " WHERE t.WISH_NO = ?";//으아아아악
-	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE WISH_NO = ?";//으아아아악
+					+ " WHERE t.WISH_NO = ?";
+	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = ?";//으아아아악
 	static final String SQL_TICKET_UPDATE_WISH = "UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = ?";
 
 	
@@ -249,16 +249,15 @@ public class TicketDAO {
 		return result;
 	}
 	//SQL_TICKET_SELECT_PER
-	public int ticSeatSelect(WishlistVO tic_seat, int wish_no) {
+	public int ticSeatSelect(int wish_no) {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
 		try {
 			pst = conn.prepareStatement(SQL_TICKET_SELECT_PER);
 			pst.setInt(1, wish_no);
 			rs = pst.executeQuery();
-			System.out.println(wish_no);
 			while(rs.next()) {
-				per_no = rs.getInt(1);
+				per_no = rs.getInt("PER_NO");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -267,12 +266,6 @@ public class TicketDAO {
 		}
 		return per_no;
 	}
-
-//	private WishlistVO wish_perno(ResultSet rs) throws SQLException {
-//		WishlistVO wish = new WishlistVO();
-//		wish.setPer_no(rs.getInt("PER_NO"));
-//		return wish;
-//	}
 	
 	public int ticSeatUpdate(PerformanceVO tic_seat, int per_no) {
 		int result = 0;
@@ -288,12 +281,13 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	public int ticWishUpdate(WishlistVO tic_wish, int per_no) {
+	
+	public int ticWishUpdate(WishlistVO tic_wish, int wish_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
 			pst = conn.prepareStatement(SQL_TICKET_UPDATE_WISH);
-			pst.setInt(1, per_no);
+			pst.setInt(1, wish_no);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
