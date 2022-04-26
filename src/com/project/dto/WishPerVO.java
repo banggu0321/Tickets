@@ -3,7 +3,7 @@ package com.project.dto;
 import java.sql.Date;
 
 public class WishPerVO {
-	private int m_id ;
+	private String m_id ;
 	private int wish_no ;
 	private String per_title ;
 	private String per_location ;
@@ -13,11 +13,29 @@ public class WishPerVO {
 	private String per_cast ;
 	private String per_category ;
 	private int per_seat ;
-	private char wish_see ;
-	public int getM_id() {
+	private String wish_see ;
+	
+	public WishPerVO() {}
+	
+	public WishPerVO(String m_id, int wish_no, String per_title, String per_location, Date per_date, String per_time,
+			String per_price, String per_cast, String per_category, int per_seat, String wish_see) {
+		super();
+		this.m_id = m_id;
+		this.wish_no = wish_no;
+		this.per_title = per_title;
+		this.per_location = per_location;
+		this.per_date = per_date;
+		this.per_time = per_time;
+		this.per_price = per_price;
+		this.per_cast = per_cast;
+		this.per_category = per_category;
+		this.per_seat = per_seat;
+		this.wish_see = wish_see;
+	}
+	public String getM_id() {
 		return m_id;
 	}
-	public void setM_id(int m_id) {
+	public void setM_id(String m_id) {
 		this.m_id = m_id;
 	}
 	public int getWish_no() {
@@ -74,10 +92,10 @@ public class WishPerVO {
 	public void setPer_seat(int per_seat) {
 		this.per_seat = per_seat;
 	}
-	public char getWish_see() {
+	public String getWish_see() {
 		return wish_see;
 	}
-	public void setWish_see(char wish_see) {
+	public void setWish_see(String wish_see) {
 		this.wish_see = wish_see;
 	}
 	@Override

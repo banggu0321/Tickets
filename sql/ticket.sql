@@ -50,7 +50,7 @@ CREATE TABLE WISHLIST(
 	wish_no NUMBER PRIMARY KEY,
 	m_id VARCHAR2(20) ,
 	per_no NUMBER ,
-	wish_see char(1) DEFAULT 'N',
+	wish_see VARCHAR2(3) DEFAULT 'N',
 	constraint wish_see_ck check(wish_see in ('N','Y')),
 	constraint wish_mem_id_fk foreign key(m_id) references MEMBER(m_id) ON DELETE CASCADE,
 	constraint wish_per_no_fk foreign key(per_no) references PERFORMANCE(per_no) ON DELETE CASCADE
@@ -117,7 +117,7 @@ DELETE FROM PERFORMANCE WHERE per_no = 1;
 INSERT INTO MEMBER VALUES('id','pw','김','aa','101');
 INSERT INTO MEMBER VALUES('id2','pw','김','aa','101');
 --2. 로그인(success,fail)
-SELECT M_ID FROM MEMBER WHERE M_ID ='id' AND M_PW ='pw';
+SELECT M_ID FROM MEMBER WHERE M_ID ='id' AND M_PW ='pw2';
 		--@@.JAVA id->static/변수으로 빼놓기(String user_id = null)
 		--@@[알림] **님 로그인되었습니다.
 		--@@[알림] 회원이 존재하지 않습니다.
@@ -144,15 +144,23 @@ WHERE NOT EXISTS (
 	WHERE m_id = 'id'
 	AND per_no = '10'
 	AND wish_see ='N');
+--분리해서 조건검색 후 result 값으로 조건문 만듬
+SELECT M_ID , PER_NO , WISH_SEE 
+FROM WISHLIST
+WHERE m_id = 'id'
+	AND per_no = '10'
+	AND wish_see ='N';
+INSERT INTO WISHLIST VALUES(seq_wishno.nextval, 'id','10', 'N');
 SELECT * FROM WISHLIST w2;
+
 
 --4. 예매하기 (해당 회원의 관심목록 출력)  w.M_ID->string 값으로 가지고 다니기 예매가능한wishlist만
 		--@@<**님의 wishlist> OR [알림]wishlist가 비었습니다. 조회 후 wish 등록해주세요 ->뒤로가기
-SELECT w.M_ID, w.WISH_NO "공연넘버(NO)", p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
-FROM WISHLIST w JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
-WHERE M_ID = 'id'
-AND per_seat <> 0
-AND WISH_SEE ='N';
+SELECT w.M_ID, w.WISH_NO 공연넘버, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
+FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
+WHERE w.M_ID = 'id'
+AND p.per_seat <> 0
+AND w.WISH_SEE ='N';
 ----1.예매하기 (N만 가능함)		-
 		--@@공연넘버(NO) 선택하세요 
 INSERT INTO TICKET VALUES(seq_ticno.nextval, 166, sysdate);
@@ -172,7 +180,7 @@ FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 WHERE M_ID = 'id';
 --3.예매취소 - 삭제
 		--@@syso>> 예매 취소는 공연 당일의 전날까지만 가능합니다. \n [취소 가능한 예매내역]
-SELECT t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
+SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id'

@@ -33,6 +33,9 @@ public class TicketService {
 		return ticketDAO.selectAll();
 	}
 	//3-4. 관심리스트 추가
+	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
+		return ticketDAO.wishlistInsertSearch(wish, id, per_no);
+	}
 	public int wishlistInsert(WishlistVO wish) {
 		return ticketDAO.wishlistInsert(wish);
 	}

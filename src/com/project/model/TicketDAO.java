@@ -25,6 +25,14 @@ public class TicketDAO {
 	static final String SQL_SELECT_TITLE = "SELECT * FROM PERFORMANCE WHERE per_title = ? AND PER_DATE > sysdate ORDER BY PER_DATE";
 	static final String SQL_SELECT_CAT = "SELECT * FROM PERFORMANCE WHERE per_category = ? AND PER_DATE > sysdate ORDER BY PER_DATE";
 	static final String SQL_SELECT_ALL = "SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_DATE";
+	static final String SQL_INSERT_WISH_SEARCH = "SELECT M_ID , PER_NO , WISH_SEE FROM WISHLIST WHERE m_id = ? AND per_no = ? AND wish_see ='N'";
+	static final String SQL_INSERT_WISH = "INSERT INTO WISHLIST VALUES(seq_wishno.nextval, ?, ?, 'N')";
+	static final String SQL_SELECT_WISH_FOR_BUY = 
+					" SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE "
+					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
+					+ " WHERE w.M_ID = ?"
+					+ " AND p.per_seat <> 0"
+					+ " AND w.WISH_SEE ='N'";
 
 	
 	// 1. 회원가입
@@ -148,15 +156,74 @@ public class TicketDAO {
 		return perlist;
 	}
 
-	// 3-4. 관심리스트 추가
+	// 3-4. 관심리스트 추가 (조건 확인)
+	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_INSERT_WISH_SEARCH);
+			pst.setString(1, id);
+			pst.setInt(2, per_no);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(id);
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
+	
 	public int wishlistInsert(WishlistVO wish) {
-		return 0;
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_INSERT_WISH);
+			pst.setString(1, wish.getM_id());
+			pst.setInt(2, wish.getPer_no());
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// 4. 예매하기
 	// 4-1. 예매가능 관심리스트 조회 WishPerVO
 	public List<WishPerVO> selectWish_Forbuy(String id) {
-		return null;
+		List<WishPerVO> wishperlist = new ArrayList<WishPerVO>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_WISH_FOR_BUY);
+			pst.setString(1, id);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				wishperlist.add(wishperlist(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println(id);
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return wishperlist;
+	}
+
+	private WishPerVO wishperlist(ResultSet rs) throws SQLException {
+		WishPerVO wish = new WishPerVO();
+		wish.setM_id(rs.getString("M_ID"));
+		wish.setWish_no(rs.getInt("WISH_NO"));
+		wish.setPer_title(rs.getString("PER_TITLE"));
+		wish.setPer_location(rs.getString("PER_LOCATION"));
+		wish.setPer_date(rs.getDate("PER_DATE"));
+		wish.setPer_time(rs.getString("PER_TIME"));
+		wish.setPer_price(rs.getString("PER_PRICE"));
+		wish.setPer_cast(rs.getString("PER_CAST"));
+		wish.setPer_category(rs.getString("PER_CATEGORY"));
+		wish.setPer_seat(rs.getInt("PER_SEAT"));
+		wish.setWish_see(rs.getString("WISH_SEE"));
+		return wish;
 	}
 
 	// 4-2. insert, update(좌석-1, See->Y)
@@ -208,4 +275,6 @@ public class TicketDAO {
 	public int memberDelete(int mem_id) {
 		return 0;
 	}
+
+	
 }

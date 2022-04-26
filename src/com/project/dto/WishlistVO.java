@@ -4,7 +4,8 @@ public class WishlistVO {
 	private int wish_no ;
 	private String m_id ;
 	private int per_no ;
-	private char wish_see ;
+	private String wish_see ;
+	
 	public int getWish_no() {
 		return wish_no;
 	}
@@ -23,10 +24,10 @@ public class WishlistVO {
 	public void setPer_no(int per_no) {
 		this.per_no = per_no;
 	}
-	public char getWish_see() {
+	public String getWish_see() {
 		return wish_see;
 	}
-	public void setWish_see(char wish_see) {
+	public void setWish_see(String wish_see) {
 		this.wish_see = wish_see;
 	}
 	@Override
