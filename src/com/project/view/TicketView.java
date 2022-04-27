@@ -26,7 +26,7 @@ public class TicketView {
 		}
 	}
 
-	public static void printWishForBuy(List<WishPerVO> Wishlist) {
+	public static void printWish(List<WishPerVO> Wishlist) {
 		System.out.println("-------------------------------");
 		for(WishPerVO wish:Wishlist) {
 			System.out.println(wish);

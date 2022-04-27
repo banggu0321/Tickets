@@ -57,6 +57,11 @@ public class TicketDAO {
 					+ " AND p.per_date - 1 > sysdate"
 					+ " ORDER BY t.TIC_NO";
 	static final String SQL_SELECT_TICKET_DEL = "DELETE FROM TICKET WHERE tic_no = ?";
+	static final String SQL_SELECT_WISH_MYPAGE = 
+					"SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE"
+					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
+					+ " WHERE M_ID = ?"
+					+ " ORDER BY w.WISH_NO";
 	
 	// 1. 회원가입
 	public int memberInsert(MemberVO mem) {
@@ -418,9 +423,24 @@ public class TicketDAO {
 		return result;
 	}
 
-	// 5-4. 관심리스트 조회
+	// 5-4. 관심리스트 조회 SQL_SELECT_WISH_MYPAGE
 	public List<WishPerVO> selectWish_mypage(String id) {
-		return null;
+		List<WishPerVO> wishperlist = new ArrayList<WishPerVO>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_WISH_MYPAGE);
+			pst.setString(1, id);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				wishperlist.add(wishperlist(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println(id);
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return wishperlist;
 	}
 
 	// 5-5. 로그아웃==?

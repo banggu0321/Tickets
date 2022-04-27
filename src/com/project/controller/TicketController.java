@@ -20,57 +20,32 @@ public class TicketController {
 		while (mainFlag) {
 			int select_num = displayMain();
 			switch (select_num) {
-			case 1:
-				memberInsert();
-				break;
-			case 2:
-				memberLogIn();
-				break;
-			case 3:
-				break;// memberLogIn(); break;
-			case 31:
-				selectPer_Title();
-				break; // 조회성공
-			case 32:
-				selectPer_Cat();
-				break;
-			case 33:
-				selectAll();
-				break;
-			case 34:
-				wishlistInsert();
-				break;
-			case 4:
-				wishForBuy();
-				break; // ticketS1();ticketS2();ticketS3();
-			case 41:
-				ticketInsert();
-				break;
-			case 42:
-				ticSeatUpdate();
-				break;
-			case 43:
-				ticWishUpdate();
-				break;
-			case 5:
-				break;
-			case 51:
-				pwUpdate();
-				break;
-			case 52:
-				selectTicBuy();
-				break;
-			case 53:
-				selectTicDel();
-				ticketDelete();
-				break;
-			// case 54: selectWish_mypage(); break;
+			case 1: memberInsert();break;
+			case 2:memberLogIn();break;
+			case 3:break;// memberLogIn(); break;
+			case 31:selectPer_Title();break; // 조회성공
+			case 32:selectPer_Cat();break;
+			case 33:selectAll();break;
+			case 34:wishlistInsert();break;
+			case 4:wishForBuy();break; // ticketS1();ticketS2();ticketS3();
+			case 41:ticketInsert();break;
+			case 42:ticSeatUpdate();break;
+			case 43:ticWishUpdate();break;
+			case 5:break;
+			case 51:pwUpdate();break;
+			case 52:selectTicBuy();break;
+			case 53:selectTicDel();ticketDelete();break;
+			case 54: selectWish_mypage(); break;
 			// case 55: logout(); break;
 			// case 56: memberDelete(); break;
 			case 6:
 				mainFlag = false;
 			}
 		}
+	}
+
+	private static void selectWish_mypage() {
+		TicketView.printWish(service.selectWish_mypage(id));
 	}
 
 	private static int displayMain() {
@@ -126,7 +101,7 @@ public class TicketController {
 	}
 
 	private static void wishForBuy() {
-		TicketView.printWishForBuy(service.selectWish_Forbuy(id));
+		TicketView.printWish(service.selectWish_Forbuy(id));
 	}
 
 	private static void wishlistInsert() {
