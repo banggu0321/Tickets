@@ -34,7 +34,7 @@ public class TicketView {
 		}
 	}
 	public static void printPerNull(String id) {
-		System.out.println("검색결과가 없습니다.\n");
+		System.out.println("[알림]검색결과가 없습니다.\n");
 	}
 
 	public static void printWish(List<WishPerVO> Wishlist) {
@@ -75,15 +75,15 @@ public class TicketView {
 	}
 
 	public static void printTicBuyNull(String id) {
-		System.out.println("[알림]예매내역이 없습니다.");
+		System.out.println("[알림]예매내역이 없습니다.\n");
 	}
 
 	public static void printTicDelNull(String id) {
-		System.out.println("[알림]취소가능한 예매내역이 없습니다.");
+		System.out.println("[알림]취소가능한 예매내역이 없습니다.\n");
 	}
 
 	public static void printWishMyNull(String id) {
-		System.out.println("[알림]wishlist가 비었습니다.");
+		System.out.println("[알림]wishlist가 비었습니다.\n");
 	}
 
 //	public static void printPer(int wishlistInsertSearch) {

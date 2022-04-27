@@ -35,7 +35,7 @@ CREATE TABLE MEMBER(
 CREATE TABLE PERFORMANCE(
 	per_no NUMBER PRIMARY KEY,
 	per_title VARCHAR2(20) NOT NULL,
-	per_location VARCHAR2(20) NOT NULL,
+	per_location VARCHAR2(50) NOT NULL,
 	per_date DATE NOT NULL,
 	per_time VARCHAR2(10) NOT NULL,
 	per_price VARCHAR2(20) NOT NULL,
@@ -102,9 +102,9 @@ FROM WISHLIST w RIGHT OUTER join TICKET t ON w.WISH_NO = t.WISH_NO
 				JOIN PERFORMANCE p ON w.per_no = p.PER_NO 
 				JOIN MEMBER m ON w.M_ID = m.M_ID;
 --2.공연 등록, 좌석 수 변경, 삭제
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아이다','블루스퀘어 신한카드홀',to_date('2022.05.10 19:00','yyyy-mm-dd hh24:mi'),'160분','150000원','윤공주','뮤지컬','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5월1일뮤지컬','장소',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','김모씨','뮤지컬','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월28일콘서트','장소',to_date('2022-04-28 11:00','yyyy-mm-dd hh24:mi'),'60분','100000원','박모씨','콘서트','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아이다','블루스퀘어 신한카드홀',to_date('2022-05-10 19:00','yyyy-mm-dd hh24:mi'),'160분','150000원','윤공주','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'웃는 남자','세종문화회관 대극장',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','김모씨','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아몬드','장소',to_date('2022-04-02 19:30','yyyy-mm-dd hh24:mi'),'60분','100000원','박모씨','콘서트','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월1일연극','장소',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','방모씨','연극','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5월1일연극','장소',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','방모씨','연극','10');
 UPDATE PERFORMANCE SET per_seat=12 WHERE per_no = 1;
@@ -117,16 +117,16 @@ DELETE FROM PERFORMANCE WHERE per_no = 1;
 INSERT INTO MEMBER VALUES('id','pw','김','aa','101');
 INSERT INTO MEMBER VALUES('id2','pw','김','aa','101');
 INSERT INTO MEMBER VALUES('id3','pw','김','aa','101');
-INSERT INTO MEMBER VALUES('id4','pw','김','aa','101');
+INSERT INTO MEMBER VALUES('d','d','김','aa','101');
 --2. 로그인(success,fail)
 SELECT M_ID FROM MEMBER WHERE M_ID ='id' AND M_PW ='pw2';
 		--@@.JAVA id->static/변수으로 빼놓기(String user_id = null)
 		--@@[알림] **님 로그인되었습니다.
 		--@@[알림] 회원이 존재하지 않습니다.
 
---3. 공연조회:제목별으로 검색, 카테고리별, 전체조회->>관심등록 --뒤로가기While
+--3. 공연조회:제목별으로 검색, 카테고리별, 예매가능한 공연, 전체조회->>관심등록 --뒤로가기While
 ---- 지난 공연과 예매가능한 공연 나눠서 출력
-SELECT * FROM PERFORMANCE WHERE per_title = '공연명' ORDER BY PER_NO ;
+SELECT * FROM PERFORMANCE WHERE per_title LIKE '%'+'공연명'+'%' ORDER BY PER_NO ;
 SELECT * FROM PERFORMANCE WHERE per_category = '뮤지컬' ORDER BY PER_NO ;
 SELECT * FROM PERFORMANCE WHERE per_category = '콘서트' ORDER BY PER_NO ;
 SELECT * FROM PERFORMANCE WHERE per_category = '연극' ORDER BY PER_NO ;
@@ -203,6 +203,13 @@ AND p.per_date - 1 > sysdate
 ORDER BY t.TIC_NO;
 		--syso>>예매번호입력하세요
 DELETE FROM TICKET WHERE tic_no = 3;
+
+--tic_no 가지고 wish_no가져와야함.
+SELECT WISH_NO FROM TICKET WHERE TIC_NO = 3; --SELECT_WISHNO_TICNO
+UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166; --UPDATE_DELETE_TICKET_WISH
+SELECT PER_NO FROM WISHLIST WHERE WISH_NO = 166; --SELECT_PERNO_WISHNO
+UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = 11; --UPDATE_DELETE_TICKET_SEAT
+
 ----4.관심목록조회
 SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
 FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 

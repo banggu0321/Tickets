@@ -450,6 +450,73 @@ public class TicketDAO {
 		}
 		return result;
 	}
+	//wish_no가져오기
+	public int ticDelWishno(int tic_no) {
+		int wish_no = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
+			pst.setInt(1, tic_no);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				wish_no = rs.getInt("wish_no");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return wish_no;
+	}
+	//update_wish
+	public int ticDelUpdateWish(WishlistVO tic_wish, int wish_no) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_WISH);
+			pst.setInt(1, wish_no);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
+	
+	//per_no가져오기
+	public int ticDelPerno(int wish_no) {
+		int per_no = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
+			pst.setInt(1, wish_no);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				wish_no = rs.getInt("wish_no");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return per_no;
+	}
+	//update_seat
+	public int ticDelUpdateSeat(PerformanceVO tic_seat, int per_no) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_SEAT);
+			pst.setInt(1, per_no);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
 
 	// 5-4. 관심리스트 조회 SQL_SELECT_WISH_MYPAGE
 	public List<WishPerVO> selectWish_mypage(String id) {
