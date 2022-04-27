@@ -102,7 +102,7 @@ FROM WISHLIST w RIGHT OUTER join TICKET t ON w.WISH_NO = t.WISH_NO
 				JOIN PERFORMANCE p ON w.per_no = p.PER_NO 
 				JOIN MEMBER m ON w.M_ID = m.M_ID;
 --2.공연 등록, 좌석 수 변경, 삭제
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월1일뮤지컬','장소',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','김모씨','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아이다','블루스퀘어 신한카드홀',to_date('2022.05.10 19:00','yyyy-mm-dd hh24:mi'),'160분','150000원','윤공주','뮤지컬','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5월1일뮤지컬','장소',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','김모씨','뮤지컬','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월28일콘서트','장소',to_date('2022-04-28 11:00','yyyy-mm-dd hh24:mi'),'60분','100000원','박모씨','콘서트','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월1일연극','장소',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','방모씨','연극','10');
