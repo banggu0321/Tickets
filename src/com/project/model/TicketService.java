@@ -32,7 +32,11 @@ public class TicketService {
 	public List<PerformanceVO> selectAll() {
 		return ticketDAO.selectAll();
 	}
-	//3-4. 관심리스트 추가
+	// 3-4 예매가능한 공연만 보기
+	public List<PerformanceVO> selectPossible() {
+		return ticketDAO.selectPossible();
+	}
+	//3-5. 관심리스트 추가
 	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
 		return ticketDAO.wishlistInsertSearch(wish, id, per_no);
 	}
@@ -86,9 +90,9 @@ public class TicketService {
 	public int selectMemDel(String id) {
 		return ticketDAO.selectMemDel(id);
 	}
-//	public int selectMemPWDel (String id, String pw) {
-//		return ticketDAO.selectMemPWDel(id, pw);
-//	}
+	public int selectMemPWDel (String id, String pw) {
+		return ticketDAO.selectMemPWDel(id, pw);
+	}
 	//5-6. delete member
 	public int memberDelete(String id) {
 		return ticketDAO.memberDelete(id);

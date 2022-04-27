@@ -20,10 +20,12 @@ public class TicketView {
 	}
 	
 	public static void printPer(List<PerformanceVO> perlist) {
-		System.out.println("-------------------------------");
-		for(PerformanceVO per:perlist) {
-			System.out.println(per);
-		}
+		if(perlist != null) {
+			System.out.println("-------------------------------");
+			for(PerformanceVO per:perlist) {
+				System.out.println(per);
+			}
+		}else { System.out.println("검색결과가 없습니다.");}
 	}
 
 	public static void printWish(List<WishPerVO> Wishlist) {
