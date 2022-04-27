@@ -21,7 +21,15 @@ public class TicketView {
 	public static void printPer(List<PerformanceVO> perlist) {
 		System.out.println("-------------------------------");
 		for(PerformanceVO per:perlist) {
-			System.out.println(per);
+			System.out.print("공연번호: " + per.getPer_no() + "\t");
+			System.out.println("공연명: " + per.getPer_title());
+			System.out.print("장소: " + per.getPer_location() + "\t");
+			System.out.println("날짜: " + per.getPer_date());
+			System.out.print("공연시간: " + per.getPer_time() + "\t");
+			System.out.print("가격: " + per.getPer_price() + "\t");
+			System.out.println("출연진: " + per.getPer_cast());
+			System.out.print("카테고리: " + per.getPer_category() + "\t");
+			System.out.println("남은좌석: " + per.getPer_seat());
 			System.out.println("-------------------------------");
 		}
 	}
@@ -32,7 +40,16 @@ public class TicketView {
 	public static void printWish(List<WishPerVO> Wishlist) {
 		System.out.println("-------------------------------");
 		for(WishPerVO wish:Wishlist) {
-			System.out.println(wish);
+			System.out.print("선택번호:" + wish.getWish_no() + "\t");
+			System.out.println("공연명: " + wish.getPer_title());
+			System.out.print("장소: " + wish.getPer_location() + "\t");
+			System.out.println("날짜: " + wish.getPer_date());
+			System.out.print("공연시간: " + wish.getPer_time() + "\t");
+			System.out.print("가격: " + wish.getPer_price() + "\t");
+			System.out.println("출연진: " + wish.getPer_cast());
+			System.out.print("카테고리: " + wish.getPer_category() + "\t");
+			System.out.print("남은좌석: " + wish.getPer_seat());
+			System.out.println("관람여부: " + wish.getWish_see());
 			System.out.println("-------------------------------");
 		}
 	}
@@ -44,7 +61,15 @@ public class TicketView {
 	public static void printTicBuy(List<TicketWishPerVO> ticbuylist) {
 		System.out.println("-------------------------------");
 		for(TicketWishPerVO tic:ticbuylist) {
-			System.out.println(tic);
+			System.out.print("선택번호:" + tic.getTic_no() + "\t");
+			System.out.print("예매일:" + tic.getTic_date() + "\t");
+			System.out.println("공연명: " + tic.getPer_title());
+			System.out.print("장소: " + tic.getPer_location() + "\t");
+			System.out.println("날짜: " + tic.getPer_date());
+			System.out.print("공연시간: " + tic.getPer_time() + "\t");
+			System.out.print("가격: " + tic.getPer_price() + "\t");
+			System.out.println("출연진: " + tic.getPer_cast());
+			System.out.print("카테고리: " + tic.getPer_category() + "\t");
 			System.out.println("-------------------------------");
 		}
 	}
