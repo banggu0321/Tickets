@@ -36,7 +36,7 @@ public class TicketController {
 			case 52:selectTicBuy();break;
 			case 53:selectTicDel();ticketDelete();break;
 			case 54: selectWish_mypage(); break;
-			// case 55: logout(); break;
+			case 55: logout(); break;
 			// case 56: memberDelete(); break;
 			case 6:
 				mainFlag = false;
@@ -44,9 +44,9 @@ public class TicketController {
 		}
 	}
 
-	private static void selectWish_mypage() {
-		TicketView.printWish(service.selectWish_mypage(id));
-	}
+	
+
+	
 
 	private static int displayMain() {
 		System.out.println("|TICKET PROGRAM|===================================");
@@ -173,6 +173,12 @@ public class TicketController {
 		System.out.print("티켓번호 : ");
 		int result = service.ticketDelete(sc.nextInt());
 		System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
-
+	}
+	private static void selectWish_mypage() {
+		TicketView.printWish(service.selectWish_mypage(id));
+	}
+	private static void logout() {
+		id = null;
+		System.out.println(id);
 	}
 }
