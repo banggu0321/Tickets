@@ -19,64 +19,14 @@ public class TicketDAO {
 	Connection conn;
 	PreparedStatement pst;
 	ResultSet rs;
+	Ticketlist ticketlist = new Ticketlist();
 
-	static final String SQL_MEM_INSERT = "INSERT INTO MEMBER VALUES(?,?,?,?,?)";
-	static final String SQL_MEM_LOGIN = "SELECT * FROM MEMBER WHERE M_ID =? AND M_PW =?";
-	static final String SQL_SELECT_TITLE = "SELECT * FROM PERFORMANCE WHERE per_title = ?  ORDER BY PER_NO";
-	static final String SQL_SELECT_CAT = "SELECT * FROM PERFORMANCE WHERE per_category = ?  ORDER BY PER_NO";
-	static final String SQL_SELECT_ALL = "SELECT * FROM PERFORMANCE ORDER BY PER_NO";
-	static final String SQL_SELECT_POSSIBLE = "SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_NO";
-	static final String SQL_INSERT_WISH_SEARCH = "SELECT M_ID , PER_NO , WISH_SEE FROM WISHLIST WHERE m_id = ? AND per_no = ? AND wish_see ='N'";
-	static final String SQL_INSERT_WISH = "INSERT INTO WISHLIST VALUES(seq_wishno.nextval, ?, ?, 'N')";
-	static final String SQL_SELECT_WISH_FOR_BUY = 
-					" SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE "
-					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
-					+ " WHERE w.M_ID = ?"
-					+ " AND p.per_seat <> 0"
-					+ " AND w.WISH_SEE ='N'"
-					+ " AND PER_DATE > sysdate"
-					+ " ORDER BY w.WISH_NO";
-	static final String SQL_INSERT_TICKET = "INSERT INTO TICKET VALUES(seq_ticno.nextval, ?, sysdate)";
-	static final String SQL_TICKET_SELECT_PER = 
-					"SELECT w.per_no"
-					+ " FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO"
-					+ " WHERE t.WISH_NO = ?";
-	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = ?";//으아아아악
-	static final String SQL_TICKET_UPDATE_WISH = "UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = ?";
-	static final String SQL_UPDATE_MEM_SEARCH = "SELECT * FROM MEMBER WHERE m_id =? AND M_PW = ?";
-	static final String SQL_UPDATE_MEM = "UPDATE MEMBER SET m_pw=? WHERE m_id =?";
-	static final String SQL_SELECT_TICKET_BUY = 
-					"SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY"
-					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
-					+ "					JOIN PERFORMANCE p USING(per_no)"
-					+ " WHERE M_ID = ?"
-					+ " ORDER BY t.TIC_NO";
-	static final String SQL_DELETE_TICKET_SEARCH = 
-					"SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY"
-					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
-					+ "					JOIN PERFORMANCE p USING(per_no)"
-					+ " WHERE M_ID = ?"
-					+ " AND p.per_date - 1 > sysdate"
-					+ " ORDER BY t.TIC_NO";
-	static final String SQL_DELETE_TICKET = "DELETE FROM TICKET WHERE tic_no = ?";
-	static final String SQL_SELECT_WISH_MYPAGE = 
-					"SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE"
-					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
-					+ " WHERE M_ID = ?"
-					+ " ORDER BY w.WISH_NO";
-	static final String SQL_DELETE_MEM_SEARCH = ""
-					+ "SELECT t.TIC_NO, p.PER_DATE"
-					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
-					+ "					JOIN PERFORMANCE p USING(per_no)"
-					+ " WHERE M_ID = ? AND p.PER_DATE > sysdate";
-	static final String SQL_DELETE_MEM = "DELETE FROM MEMBER WHERE M_ID = ?";
-	
 	// 1. 회원가입
 	public int memberInsert(MemberVO mem) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_MEM_INSERT);
+			pst = conn.prepareStatement(TicketSQL.SQL_MEM_INSERT);
 			pst.setString(1, mem.getM_id());
 			pst.setString(2, mem.getM_pw());
 			pst.setString(3, mem.getM_name());
@@ -96,12 +46,12 @@ public class TicketDAO {
 		MemberVO mem = null;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_MEM_LOGIN);
+			pst = conn.prepareStatement(TicketSQL.SQL_MEM_LOGIN);
 			pst.setString(1, mem_id);
 			pst.setString(2, mem_pw);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				mem = memInfo(rs);
+				mem = ticketlist.memInfo(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -110,42 +60,19 @@ public class TicketDAO {
 		}
 		return mem;
 	}
-	
-	private MemberVO memInfo(ResultSet rs) throws SQLException {
-		MemberVO mem = new MemberVO();
-		mem.setM_id(rs.getString("M_ID"));
-		mem.setM_pw(rs.getString("M_PW"));
-		mem.setM_name(rs.getString("M_NAME"));
-		mem.setM_email(rs.getString("M_EMAIL"));
-		mem.setM_phone(rs.getString("M_PHONE"));
-		return mem;
-	}
 
 	// 3. 공연조회
-	private PerformanceVO perlist(ResultSet rs) throws SQLException {
-		PerformanceVO per = new PerformanceVO();
-		per.setPer_no(rs.getInt("PER_NO"));
-		per.setPer_title(rs.getString("PER_TITLE"));
-		per.setPer_location(rs.getString("PER_LOCATION"));
-		per.setPer_date(rs.getDate("PER_DATE"));
-		per.setPer_time(rs.getString("PER_TIME"));
-		per.setPer_price(rs.getString("PER_PRICE"));
-		per.setPer_cast(rs.getString("PER_CAST"));
-		per.setPer_category(rs.getString("PER_CATEGORY"));
-		per.setPer_seat(rs.getInt("PER_SEAT"));
-		return per;
-	}
-
+	
 	// 3-1. 제목별 조회
 	public List<PerformanceVO> selectPer_Title(String title) {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_TITLE);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TITLE);
 			pst.setString(1, title);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				perlist.add(perlist(rs));
+				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -154,11 +81,12 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	//제목별 (NULL확인)
 	public int selectPer_TitleInt(String title) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_TITLE);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TITLE);
 			pst.setString(1, title);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -168,16 +96,17 @@ public class TicketDAO {
 		}
 		return result;
 	}
+	
 	// 3-2. 카테고리별 조회
 	public List<PerformanceVO> selectPer_Cat(String category) {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_CAT);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_CAT);
 			pst.setString(1, category);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				perlist.add(perlist(rs));
+				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -186,11 +115,12 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	//카테고리별 (NULL확인)
 	public int selectPer_CatInt(String category) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_CAT);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_CAT);
 			pst.setString(1, category);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -206,10 +136,10 @@ public class TicketDAO {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_ALL);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_ALL);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				perlist.add(perlist(rs));
+				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -218,11 +148,12 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	//전체 (NULL확인)
 	public int selectAllInt() {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_ALL);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_ALL);
 			rs = pst.executeQuery();
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -238,10 +169,10 @@ public class TicketDAO {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_POSSIBLE);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_POSSIBLE);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				perlist.add(perlist(rs));
+				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -250,11 +181,12 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	//예매가능 (NULL확인)
 	public int selectPossibleInt() {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_POSSIBLE);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_POSSIBLE);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -265,11 +197,12 @@ public class TicketDAO {
 	}
 	
 	// 3-5. 관심리스트 추가 (조건 확인)
+	// 조건확인
 	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_INSERT_WISH_SEARCH);
+			pst = conn.prepareStatement(TicketSQL.SQL_INSERT_WISH_SEARCH);
 			pst.setString(1, id);
 			pst.setInt(2, per_no);
 			result = pst.executeUpdate();
@@ -280,11 +213,12 @@ public class TicketDAO {
 		}
 		return result;
 	}
+	//관심리스트 추가
 	public int wishlistInsert(WishlistVO wish) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_INSERT_WISH);
+			pst = conn.prepareStatement(TicketSQL.SQL_INSERT_WISH);
 			pst.setString(1, wish.getM_id());
 			pst.setInt(2, wish.getPer_no());
 			result = pst.executeUpdate();
@@ -302,11 +236,11 @@ public class TicketDAO {
 		List<WishPerVO> wishperlist = new ArrayList<WishPerVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_WISH_FOR_BUY);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_FOR_BUY);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				wishperlist.add(wishperlist(rs));
+				wishperlist.add(ticketlist.wishperlist(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println(id);
@@ -316,11 +250,12 @@ public class TicketDAO {
 		}
 		return wishperlist;
 	}
+	//관심리스트 (NULL확인)
 	public int selectWish_Forbuy_Int(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_WISH_FOR_BUY);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_FOR_BUY);
 			pst.setString(1, id);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -330,28 +265,15 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	private WishPerVO wishperlist(ResultSet rs) throws SQLException {
-		WishPerVO wish = new WishPerVO();
-		wish.setM_id(rs.getString("M_ID"));
-		wish.setWish_no(rs.getInt("WISH_NO"));
-		wish.setPer_title(rs.getString("PER_TITLE"));
-		wish.setPer_location(rs.getString("PER_LOCATION"));
-		wish.setPer_date(rs.getDate("PER_DATE"));
-		wish.setPer_time(rs.getString("PER_TIME"));
-		wish.setPer_price(rs.getString("PER_PRICE"));
-		wish.setPer_cast(rs.getString("PER_CAST"));
-		wish.setPer_category(rs.getString("PER_CATEGORY"));
-		wish.setPer_seat(rs.getInt("PER_SEAT"));
-		wish.setWish_see(rs.getString("WISH_SEE"));
-		return wish;
-	}
+	
+	
 
 	// 4-2. insert, update(좌석-1, See->Y)
 	public int ticketInsert(TicketVO ticket) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_INSERT_TICKET);
+			pst = conn.prepareStatement(TicketSQL.SQL_INSERT_TICKET);
 			pst.setInt(1, ticket.getWish_no());
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -366,7 +288,7 @@ public class TicketDAO {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_TICKET_SELECT_PER);
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
 			pst.setInt(1, wish_no);
 			rs = pst.executeQuery();
 			while(rs.next()) {
@@ -384,7 +306,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_TICKET_UPDATE_SEAT);
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_SEAT);
 			pst.setInt(1, per_no);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -399,7 +321,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_TICKET_UPDATE_WISH);
+			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_WISH);
 			pst.setInt(1, wish_no);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -416,7 +338,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_UPDATE_MEM_SEARCH);
+			pst = conn.prepareStatement(TicketSQL.SQL_UPDATE_MEM_SEARCH);
 			pst.setString(1, id);
 			pst.setString(2, pw);
 			result = pst.executeUpdate();
@@ -432,7 +354,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_UPDATE_MEM);
+			pst = conn.prepareStatement(TicketSQL.SQL_UPDATE_MEM);
 			pst.setString(1, pw);
 			pst.setString(2, id);
 			result = pst.executeUpdate();
@@ -449,7 +371,7 @@ public class TicketDAO {
 		List<TicketWishPerVO> ticperlist = new ArrayList<>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_TICKET_BUY);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TICKET_BUY);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
@@ -469,7 +391,7 @@ public class TicketDAO {
 		List<TicketWishPerVO> ticperlist = new ArrayList<>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_DELETE_TICKET_SEARCH);
+			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_TICKET_SEARCH);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
@@ -504,7 +426,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_DELETE_TICKET);
+			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_TICKET);
 			pst.setInt(1, ticNum);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -520,11 +442,11 @@ public class TicketDAO {
 		List<WishPerVO> wishperlist = new ArrayList<WishPerVO>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_WISH_MYPAGE);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_MYPAGE);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				wishperlist.add(wishperlist(rs));
+				wishperlist.add(ticketlist.wishperlist(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println(id);
@@ -541,7 +463,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_DELETE_MEM_SEARCH);
+			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_MEM_SEARCH);
 			pst.setString(1, id);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -555,7 +477,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_UPDATE_MEM_SEARCH);
+			pst = conn.prepareStatement(TicketSQL.SQL_UPDATE_MEM_SEARCH);
 			pst.setString(1, id);
 			pst.setString(2, pw);
 			result = pst.executeUpdate();
@@ -572,7 +494,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_DELETE_MEM);
+			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_MEM);
 			pst.setString(1, mem_id);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {

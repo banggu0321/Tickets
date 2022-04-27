@@ -26,22 +26,10 @@ public class TicketController {
 			case 4: displayTicket(); break;
 			case 5: displayMypage(); break;
 			case 6: mainFlag = false;
-			
-//			//--------------------------------
-//			case 31:selectPer_Title();break;
-//			case 32:selectPer_Cat();break;
-//			case 33:selectAll();break;
-//			case 34:wishlistInsert();break;
-			//--------------------------------
-//			case 51:pwUpdate();break;
-//			case 52:selectTicBuy();break;
-//			case 53:selectTicDel();ticketDelete();break;
-//			case 54: selectWish_mypage(); break;
-//			case 55: logout(); break;
-//			case 56: memberDelete(); break;
 			}
 		}
 	}
+	
 	private static int displayMain() {
 		System.out.println("|TICKET PROGRAM|===================================");
 		System.out.print("1.회원가입|");
@@ -142,6 +130,7 @@ public class TicketController {
 			ticketInsert(); 
 			ticSeatUpdate(); 
 			ticWishUpdate(); 
+			wish_no = 0;
 		}else TicketView.printWishNull(id);
 	}
 
