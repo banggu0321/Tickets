@@ -32,7 +32,8 @@ public class TicketDAO {
 					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
 					+ " WHERE w.M_ID = ?"
 					+ " AND p.per_seat <> 0"
-					+ " AND w.WISH_SEE ='N'";
+					+ " AND w.WISH_SEE ='N'"
+					+ " ORDER BY w.WISH_NO";
 	static final String SQL_INSERT_TICKET = "INSERT INTO TICKET VALUES(seq_ticno.nextval, ?, sysdate)";
 	static final String SQL_TICKET_SELECT_PER = 
 					"SELECT w.per_no"
@@ -40,7 +41,22 @@ public class TicketDAO {
 					+ " WHERE t.WISH_NO = ?";
 	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = ?";//으아아아악
 	static final String SQL_TICKET_UPDATE_WISH = "UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = ?";
-
+	static final String SQL_UPDATE_MEM_SEARCH = "SELECT * FROM MEMBER WHERE m_id =? AND M_PW = ?";
+	static final String SQL_UPDATE_MEM = "UPDATE MEMBER SET m_pw=? WHERE m_id =?";
+	static final String SQL_SELECT_TICKET_BUY = 
+					"SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY"
+					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
+					+ "					JOIN PERFORMANCE p USING(per_no)"
+					+ " WHERE M_ID = ?"
+					+ " ORDER BY t.TIC_NO";
+	static final String SQL_SELECT_TICKET_DEL_SEARCH = 
+					"SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY"
+					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
+					+ "					JOIN PERFORMANCE p USING(per_no)"
+					+ " WHERE M_ID = ?"
+					+ " AND p.per_date - 1 > sysdate"
+					+ " ORDER BY t.TIC_NO";
+	static final String SQL_SELECT_TICKET_DEL = "DELETE FROM TICKET WHERE tic_no = ?";
 	
 	// 1. 회원가입
 	public int memberInsert(MemberVO mem) {
@@ -248,7 +264,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//SQL_TICKET_SELECT_PER
+	
 	public int ticSeatSelect(int wish_no) {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
@@ -298,24 +314,108 @@ public class TicketDAO {
 	}
 
 	// 5. 마이페이지
-	// 5-1. 비밀번호 수정 (id다시입력)
-	public int pwUpdate(MemberVO mem) {
-		return 0;
+	// 5-1. 비밀번호 수정 (id, pw다시입력)
+	public int memUpdateSearch(MemberVO mem, String id, String pw) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_UPDATE_MEM_SEARCH);
+			pst.setString(1, id);
+			pst.setString(2, pw);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(id);
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
+	//SQL_UPDATE_MEM
+	public int pwUpdate(MemberVO mem, String id, String pw) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_UPDATE_MEM);
+			pst.setString(1, pw);
+			pst.setString(2, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// 5-2. 예매 확인
 	public List<TicketWishPerVO> selectTicketBuy(String id) {
-		return null;
+		List<TicketWishPerVO> ticperlist = new ArrayList<>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_TICKET_BUY);
+			pst.setString(1, id);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				ticperlist.add(ticperlist(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println(id);
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return ticperlist;
 	}
-
+	
 	// 5-3. 예매 취소 -> 가능 조회
 	public List<TicketWishPerVO> selectTicketDel(String id) {
-		return null;
+		List<TicketWishPerVO> ticperlist = new ArrayList<>();
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_TICKET_DEL_SEARCH);
+			pst.setString(1, id);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				ticperlist.add(ticperlist(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println(id);
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return ticperlist;
+	}
+	
+	private TicketWishPerVO ticperlist(ResultSet rs) throws SQLException {
+		TicketWishPerVO per = new TicketWishPerVO();
+		per.setM_id(rs.getString(1));
+		per.setTic_no(rs.getInt(2));
+		per.setTic_date(rs.getDate(3));
+		per.setPer_title(rs.getString(4));
+		per.setPer_location(rs.getString(5));
+		per.setPer_date(rs.getDate(6));
+		per.setPer_time(rs.getString(7));
+		per.setPer_price(rs.getString(8));
+		per.setPer_cast(rs.getString(9));
+		per.setPer_category(rs.getString(10));
+		return per;
 	}
 
 	// 5-3. 예매 delete
 	public int ticketDelete(int ticNum) {
-		return 0;
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_TICKET_DEL);
+			pst.setInt(1, ticNum);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// 5-4. 관심리스트 조회

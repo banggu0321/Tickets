@@ -160,23 +160,25 @@ SELECT w.M_ID, w.WISH_NO 공연넘버, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.
 FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
 WHERE w.M_ID = 'id'
 AND p.per_seat <> 0
-AND w.WISH_SEE ='N';
+AND w.WISH_SEE ='N'
+ORDER BY w.WISH_NO ;
 ----1.예매하기 (N만 가능함)		-
 		--@@공연넘버(NO) 선택하세요 
 INSERT INTO TICKET VALUES(seq_ticno.nextval, 166, sysdate);
 --관심번호를 가지고 per_no가져와야함..--1
-UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = 11;
-
 SELECT w.per_no
 FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO 
-WHERE t.WISH_NO = 174;
+WHERE t.WISH_NO = 182;
+
+UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = 11;
 
 --관심번호가지고 와야함--2
 UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166;
 		--@@[알림]예매가 완료되었습니다.
 ----2.뒤로가기while
 --5. 마이페이지
-----1.개인정보수정(비밀번호만)- id 다시입력
+----1.개인정보수정(비밀번호만)- id, pw 다시입력
+SELECT * FROM "MEMBER" m WHERE m_id ='id' AND M_PW = 'pw2';
 UPDATE MEMBER SET m_pw='pw2' WHERE m_id ='id' AND 'id' = 'id';
 		--@@[알림] 비밀번호가 수정되었습니다.
 ----2.예매확인 - 조회
@@ -184,18 +186,23 @@ UPDATE MEMBER SET m_pw='pw2' WHERE m_id ='id' AND 'id' = 'id';
 SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
-WHERE M_ID = 'id';
+WHERE M_ID = 'id'
+ORDER BY t.TIC_NO;
 --3.예매취소 - 삭제
 		--@@syso>> 예매 취소는 공연 당일의 전날까지만 가능합니다. \n [취소 가능한 예매내역]
 SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id'
-AND p.per_date - 1 > sysdate;
+AND p.per_date - 1 > sysdate
+ORDER BY t.TIC_NO;
 		--syso>>예매번호입력하세요
 DELETE FROM TICKET WHERE tic_no = 3;
 ----4.관심목록조회
-SELECT * FROM WISHLIST WHERE M_ID = 'id';
+SELECT w.M_ID, w.WISH_NO 공연넘버, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
+FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
+WHERE M_ID = 'id'
+ORDER BY w.WISH_NO;
 ----5.로그아웃 id=null
 ----6.탈퇴(예매내역 있으면 탈퇴불가)	>@@[알림]탈퇴할 수 없습니다.
 SELECT t.TIC_NO, p.PER_DATE

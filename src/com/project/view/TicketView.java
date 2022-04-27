@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.project.dto.MemberVO;
 import com.project.dto.PerformanceVO;
+import com.project.dto.TicketWishPerVO;
 import com.project.dto.WishPerVO;
 
 public class TicketView {
@@ -29,6 +30,13 @@ public class TicketView {
 		System.out.println("-------------------------------");
 		for(WishPerVO wish:Wishlist) {
 			System.out.println(wish);
+		}
+	}
+
+	public static void printTicBuy(List<TicketWishPerVO> ticbuylist) {
+		System.out.println("-------------------------------");
+		for(TicketWishPerVO tic:ticbuylist) {
+			System.out.println(tic);
 		}
 	}
 

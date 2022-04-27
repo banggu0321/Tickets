@@ -3,16 +3,33 @@ package com.project.dto;
 import java.sql.Date;
 
 public class TicketWishPerVO {
-	String m_id;
-	int tic_no;
-	Date tic_date;
-	String per_title;
-	String per_location ;
-	Date per_date ;
-	String per_time ;
-	String per_price ;
-	String per_cast ; 
-	String per_category ;
+	private String m_id;
+	private int tic_no;
+	private Date tic_date;
+	private String per_title;
+	private String per_location ;
+	private Date per_date ;
+	private String per_time ;
+	private String per_price ;
+	private String per_cast ; 
+	private String per_category ;
+	
+	public TicketWishPerVO() {}
+	
+	public TicketWishPerVO(String m_id, int tic_no, Date tic_date, String per_title, String per_location, Date per_date,
+			String per_time, String per_price, String per_cast, String per_category) {
+		super();
+		this.m_id = m_id;
+		this.tic_no = tic_no;
+		this.tic_date = tic_date;
+		this.per_title = per_title;
+		this.per_location = per_location;
+		this.per_date = per_date;
+		this.per_time = per_time;
+		this.per_price = per_price;
+		this.per_cast = per_cast;
+		this.per_category = per_category;
+	}
 	
 	public String getM_id() {
 		return m_id;

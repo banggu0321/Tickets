@@ -59,8 +59,11 @@ public class TicketService {
 	}
 	//5. 마이페이지
 	//5-1. 비밀번호 수정 (id다시입력)
-	public int pwUpdate(MemberVO mem) {
-		return ticketDAO.pwUpdate(mem);
+	public int memUpdateSearch(MemberVO mem, String id, String pw) {
+		return ticketDAO.memUpdateSearch(mem, id, pw);
+	}
+	public int pwUpdate(MemberVO mem, String id, String pw) {
+		return ticketDAO.pwUpdate(mem, id, pw);
 	}
 	//5-2. 예매 확인
 	public List<TicketWishPerVO> selectTicketBuy(String id) {
