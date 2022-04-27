@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.project.dto.MemberVO;
 import com.project.dto.PerformanceVO;
+import com.project.dto.TicketWishPerVO;
 import com.project.dto.WishPerVO;
 
 public class Ticketlist {
@@ -44,5 +45,20 @@ public class Ticketlist {
 		wish.setPer_seat(rs.getInt("PER_SEAT"));
 		wish.setWish_see(rs.getString("WISH_SEE"));
 		return wish;
+	}
+
+	TicketWishPerVO ticperlist(ResultSet rs) throws SQLException {
+		TicketWishPerVO per = new TicketWishPerVO();
+		per.setM_id(rs.getString(1));
+		per.setTic_no(rs.getInt(2));
+		per.setTic_date(rs.getDate(3));
+		per.setPer_title(rs.getString(4));
+		per.setPer_location(rs.getString(5));
+		per.setPer_date(rs.getDate(6));
+		per.setPer_time(rs.getString(7));
+		per.setPer_price(rs.getString(8));
+		per.setPer_cast(rs.getString(9));
+		per.setPer_category(rs.getString(10));
+		return per;
 	}
 }

@@ -62,7 +62,6 @@ public class TicketDAO {
 	}
 
 	// 3. 공연조회
-	
 	// 3-1. 제목별 조회
 	public List<PerformanceVO> selectPer_Title(String title) {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
@@ -266,9 +265,8 @@ public class TicketDAO {
 		return result;
 	}
 	
-	
-
 	// 4-2. insert, update(좌석-1, See->Y)
+	//insert
 	public int ticketInsert(TicketVO ticket) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -283,7 +281,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+	//per_no가져오기(update_seat)
 	public int ticSeatSelect(int wish_no) {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
@@ -301,7 +299,7 @@ public class TicketDAO {
 		}
 		return per_no;
 	}
-	
+	//update_seat
 	public int ticSeatUpdate(PerformanceVO tic_seat, int per_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -316,7 +314,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+	//update_wish
 	public int ticWishUpdate(WishlistVO tic_wish, int wish_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -333,7 +331,8 @@ public class TicketDAO {
 	}
 
 	// 5. 마이페이지
-	// 5-1. 비밀번호 수정 (id, pw다시입력)
+	// 5-1. 비밀번호 수정
+	// id, pw다시입력 후 확인
 	public int memUpdateSearch(MemberVO mem, String id, String pw) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -349,7 +348,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//SQL_UPDATE_MEM
+	//비밀번호 수정
 	public int pwUpdate(MemberVO mem, String id, String pw) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -375,7 +374,7 @@ public class TicketDAO {
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				ticperlist.add(ticperlist(rs));
+				ticperlist.add(ticketlist.ticperlist(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println(id);
@@ -395,7 +394,7 @@ public class TicketDAO {
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				ticperlist.add(ticperlist(rs));
+				ticperlist.add(ticketlist.ticperlist(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println(id);
@@ -405,23 +404,8 @@ public class TicketDAO {
 		}
 		return ticperlist;
 	}
-	
-	private TicketWishPerVO ticperlist(ResultSet rs) throws SQLException {
-		TicketWishPerVO per = new TicketWishPerVO();
-		per.setM_id(rs.getString(1));
-		per.setTic_no(rs.getInt(2));
-		per.setTic_date(rs.getDate(3));
-		per.setPer_title(rs.getString(4));
-		per.setPer_location(rs.getString(5));
-		per.setPer_date(rs.getDate(6));
-		per.setPer_time(rs.getString(7));
-		per.setPer_price(rs.getString(8));
-		per.setPer_cast(rs.getString(9));
-		per.setPer_category(rs.getString(10));
-		return per;
-	}
 
-	// 5-3. 예매 delete
+	// delete ticket
 	public int ticketDelete(int ticNum) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -458,7 +442,8 @@ public class TicketDAO {
 	}
 
 	// 5-5. 로그아웃 id = null
-	// 5-6. 탈퇴 가능 확인
+	// 5-6. 회원탈퇴
+	//탈퇴 가능 확인
 	public int selectMemDel(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -473,6 +458,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
+	//pw입력 다시입력 후 id, pw확인
 	public int selectMemPWDel (String id, String pw) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -489,7 +475,7 @@ public class TicketDAO {
 		return result;
 	}
 
-	// 5-6. delete member
+	// delete member
 	public int memberDelete(String mem_id) {
 		int result = 0;
 		conn = DBUtil.getConnection();

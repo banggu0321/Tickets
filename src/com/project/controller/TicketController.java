@@ -20,8 +20,8 @@ public class TicketController {
 		while (mainFlag) {
 			int select_num = displayMain();
 			switch (select_num) {
-			case 1: memberInsert();break;
-			case 2: memberLogIn();break;
+			case 1: memberInsert(); break;
+			case 2: memberLogIn(); break;
 			case 3: displaySelete(); break;
 			case 4: displayTicket(); break;
 			case 5: displayMypage(); break;
@@ -56,7 +56,7 @@ public class TicketController {
 		System.out.print("Phone : ");
 		mem.setM_phone(sc.next());
 		int result = service.memberInsert(mem);
-		System.out.println(result > 0 ? "[알림]회원가입 되었습니다." : "[알림]회원가입 실패");
+		System.out.println(result > 0 ? "[알림]회원가입 되었습니다.\n" : "");
 	}
 
 	private static void memberLogIn() {
@@ -70,28 +70,29 @@ public class TicketController {
 	
 	private static void displaySelete() {
 		System.out.println("1.제목별|2.카테고리별|3.전체 조회|4.예매가능조회|5.뒤로가기");
-		System.out.print("작업을 선택하세요>>");
+		System.out.print("선택>>");
 		int select = sc.nextInt();
 		switch (select) {
-			case 1: selectPer_Title(); wishlistInsert(); break;
-			case 2: selectPer_Cat(); wishlistInsert(); break;
-			case 3: selectAll(); wishlistInsert(); break;
-			case 4: selectPossible(); wishlistInsert(); break;
+			case 1: selectPer_Title(); break;
+			case 2: selectPer_Cat(); break;
+			case 3: selectAll(); break;
+			case 4: selectPossible(); break;
 			case 5: break;
 		}
 	}
 	private static void selectPer_Title() {
-		System.out.print("제목별 검색>> ");
+		System.out.print("제목 : ");
 		String title = sc.next();
 		int result = service.selectPer_TitleInt(title);
 		if(result >= 1) {
 			TicketView.printPer(service.selectPer_Title(title));
+			wishlistInsert(); 
 		}else TicketView.printPerNull(id);
 	}
 
 	private static void selectPer_Cat() {
-		System.out.println("1.뮤지컬|2.콘서트|3.연극|4.클래식");
-		System.out.print("작업을 선택하세요>>");
+		System.out.println("1)뮤지컬 2)콘서트 3)연극 4)클래식");
+		System.out.print("선택>>");
 		int select = sc.nextInt();
 		String cat = "";
 		switch (select) {
@@ -103,19 +104,40 @@ public class TicketController {
 		int result = service.selectPer_CatInt(cat);
 		if(result >= 1) {
 			TicketView.printPer(service.selectPer_Cat(cat));
+			wishlistInsert(); 
 		}else TicketView.printPerNull(id);
 	}
 	private static void selectAll() {
 		int result = service.selectAllInt();
 		if(result >= 1) {
 			TicketView.printPer(service.selectAll());
+			wishlistInsert(); 
 		}else TicketView.printPerNull(id);
 	}
 	private static void selectPossible() {
 		int result = service.selectPossibleInt();
 		if(result >= 1) {
 			TicketView.printPer(service.selectPossible());
+			wishlistInsert(); 
 		}else TicketView.printPerNull(id);
+	}
+	private static void wishlistInsert() {
+		if(id != null) {
+			System.out.println("[1]WISHLIST 추가 [2]뒤로가기");
+			int add = sc.nextInt();
+			if(add == 1) {
+				WishlistVO wishlist = new WishlistVO();
+				System.out.print("Per_no : ");
+				int per_no = sc.nextInt();
+				int result = service.wishlistInsertSearch(wishlist, id, per_no);
+				if (result == 0) {
+					wishlist.setM_id(id);
+					wishlist.setPer_no(per_no);
+					int insert = service.wishlistInsert(wishlist);
+					System.out.println(insert > 0 ? "[알림] Wishlist에 추가되었습니다.\n" : "");
+				} else System.out.println("[알림]Wishlist에 존재하는 공연입니다.\n");
+			}else System.out.println();
+		}else System.out.println();
 	}
 	private static void displayTicket() {
 		if(id != null) {
@@ -132,21 +154,6 @@ public class TicketController {
 			ticWishUpdate(); 
 			wish_no = 0;
 		}else TicketView.printWishNull(id);
-	}
-
-	private static void wishlistInsert() {
-		if(id != null) {
-			WishlistVO wishlist = new WishlistVO();
-			System.out.print("Per_no : ");
-			int per_no = sc.nextInt();
-			int result = service.wishlistInsertSearch(wishlist, id, per_no);
-			if (result == 0) {
-				wishlist.setM_id(id);
-				wishlist.setPer_no(per_no);
-				int insert = service.wishlistInsert(wishlist);
-				System.out.println(insert > 0 ? "[알림]success " : "[알림]실패");
-			} else System.out.println("Wishlist에 존재하는 공연입니다.");
-		}else System.out.println();
 	}
 
 	private static void ticketInsert() {
@@ -175,7 +182,7 @@ public class TicketController {
 	private static void displayMypage() {
 		if(id != null) {
 			System.out.println("1.비밀번호변경|2.예매확인|3.예매취소|4.관심목록조회|5.로그아웃|6.회원탈퇴|7.뒤로가기");
-			System.out.print("작업을 선택하세요>>");
+			System.out.print("선택>>");
 			int select = sc.nextInt();
 			switch (select) {
 			case 1: pwUpdate();break;

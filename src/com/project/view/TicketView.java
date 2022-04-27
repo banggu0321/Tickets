@@ -15,7 +15,6 @@ public class TicketView {
 			return mem.getM_id(); }
 		else
 			System.out.println("[알림] 로그인 실패");
-		System.out.println();
 		return null;
 	}
 	
@@ -23,20 +22,22 @@ public class TicketView {
 		System.out.println("-------------------------------");
 		for(PerformanceVO per:perlist) {
 			System.out.println(per);
+			System.out.println("-------------------------------");
 		}
 	}
 	public static void printPerNull(String id) {
-		System.out.println("검색결과가 없습니다.");
+		System.out.println("검색결과가 없습니다.\n");
 	}
 
 	public static void printWish(List<WishPerVO> Wishlist) {
 		System.out.println("-------------------------------");
 		for(WishPerVO wish:Wishlist) {
 			System.out.println(wish);
+			System.out.println("-------------------------------");
 		}
 	}
 	public static void printWishNull(String id) {
-		System.out.println("wishlist를 추가하세요");
+		System.out.println("[알림]wishlist를 추가하세요\n");
 	}
 	
 
@@ -44,6 +45,7 @@ public class TicketView {
 		System.out.println("-------------------------------");
 		for(TicketWishPerVO tic:ticbuylist) {
 			System.out.println(tic);
+			System.out.println("-------------------------------");
 		}
 	}
 
