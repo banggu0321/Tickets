@@ -154,6 +154,20 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	public int selectPer_TitleInt(String title) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_TITLE);
+			pst.setString(1, title);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
 	// 3-2. 카테고리별 조회
 	public List<PerformanceVO> selectPer_Cat(String category) {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
@@ -171,6 +185,20 @@ public class TicketDAO {
 			DBUtil.dbClose(rs, pst, conn);
 		}
 		return perlist;
+	}
+	public int selectPer_CatInt(String category) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_CAT);
+			pst.setString(1, category);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// 3-3. 전체 조회
@@ -190,6 +218,21 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	public int selectAllInt() {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_ALL);
+			rs = pst.executeQuery();
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
+	
 	// 3-4 예매가능한 공연만 보기
 	public List<PerformanceVO> selectPossible() {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
@@ -207,6 +250,20 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
+	public int selectPossibleInt() {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_POSSIBLE);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
+	
 	// 3-5. 관심리스트 추가 (조건 확인)
 	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
 		int result = 0;
@@ -223,7 +280,6 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
 	public int wishlistInsert(WishlistVO wish) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -274,7 +330,6 @@ public class TicketDAO {
 		}
 		return result;
 	}
-
 	private WishPerVO wishperlist(ResultSet rs) throws SQLException {
 		WishPerVO wish = new WishPerVO();
 		wish.setM_id(rs.getString("M_ID"));

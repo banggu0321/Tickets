@@ -24,17 +24,29 @@ public class TicketService {
 	public List<PerformanceVO> selectPer_Title(String title) {
 		return ticketDAO.selectPer_Title(title);
 	}
+	public int selectPer_TitleInt(String title) {
+		return ticketDAO.selectPer_TitleInt(title);
+	}
 	//3-2. 카테고리별 조회
 	public List<PerformanceVO> selectPer_Cat(String category) {
 		return ticketDAO.selectPer_Cat(category);
+	}
+	public int selectPer_CatInt(String category) {
+		return ticketDAO.selectPer_CatInt(category);
 	}
 	//3-3. 전체 조회
 	public List<PerformanceVO> selectAll() {
 		return ticketDAO.selectAll();
 	}
+	public int selectAllInt() {
+		return ticketDAO.selectAllInt();
+	}
 	// 3-4 예매가능한 공연만 보기
 	public List<PerformanceVO> selectPossible() {
 		return ticketDAO.selectPossible();
+	}
+	public int selectPossibleInt() {
+		return ticketDAO.selectPossibleInt();
 	}
 	//3-5. 관심리스트 추가
 	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {

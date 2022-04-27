@@ -94,7 +94,11 @@ public class TicketController {
 	}
 	private static void selectPer_Title() {
 		System.out.print("제목별 검색>> ");
-		TicketView.printPer(service.selectPer_Title(sc.next()));
+		String title = sc.next();
+		int result = service.selectPer_TitleInt(title);
+		if(result >= 1) {
+			TicketView.printPer(service.selectPer_Title(title));
+		}else TicketView.printPerNull(id);
 	}
 
 	private static void selectPer_Cat() {
@@ -108,13 +112,22 @@ public class TicketController {
 			case 3: cat = "연극"; break;
 			case 4: cat = "클래식"; break;
 			}
-		TicketView.printPer(service.selectPer_Cat(cat));
+		int result = service.selectPer_CatInt(cat);
+		if(result >= 1) {
+			TicketView.printPer(service.selectPer_Cat(cat));
+		}else TicketView.printPerNull(id);
 	}
 	private static void selectAll() {
-		TicketView.printPer(service.selectAll());
+		int result = service.selectAllInt();
+		if(result >= 1) {
+			TicketView.printPer(service.selectAll());
+		}else TicketView.printPerNull(id);
 	}
 	private static void selectPossible() {
-		TicketView.printPer(service.selectPossible());
+		int result = service.selectPossibleInt();
+		if(result >= 1) {
+			TicketView.printPer(service.selectPossible());
+		}else TicketView.printPerNull(id);
 	}
 	private static void displayTicket() {
 		if(id != null) {
@@ -133,16 +146,18 @@ public class TicketController {
 	}
 
 	private static void wishlistInsert() {
-		WishlistVO wishlist = new WishlistVO();
-		System.out.print("Per_no : ");
-		int per_no = sc.nextInt();
-		int result = service.wishlistInsertSearch(wishlist, id, per_no);
-		if (result == 0) {
-			wishlist.setM_id(id);
-			wishlist.setPer_no(per_no);
-			int insert = service.wishlistInsert(wishlist);
-			System.out.println(insert > 0 ? "[알림]success " : "[알림]실패");
-		} else System.out.println("Wishlist에 존재하는 공연입니다.");
+		if(id != null) {
+			WishlistVO wishlist = new WishlistVO();
+			System.out.print("Per_no : ");
+			int per_no = sc.nextInt();
+			int result = service.wishlistInsertSearch(wishlist, id, per_no);
+			if (result == 0) {
+				wishlist.setM_id(id);
+				wishlist.setPer_no(per_no);
+				int insert = service.wishlistInsert(wishlist);
+				System.out.println(insert > 0 ? "[알림]success " : "[알림]실패");
+			} else System.out.println("Wishlist에 존재하는 공연입니다.");
+		}else System.out.println();
 	}
 
 	private static void ticketInsert() {
