@@ -88,9 +88,15 @@ public class TicketService {
 	public List<TicketWishPerVO> selectTicketBuy(String id) {
 		return ticketDAO.selectTicketBuy(id);
 	}
+	public int selectTicketBuyInt(String id) {
+		return ticketDAO.selectTicketBuyInt(id);
+	}
 	//5-3. 예매 취소 -> 가능 조회
 	public List<TicketWishPerVO> selectTicketDel(String id) {
 		return ticketDAO.selectTicketDel(id);
+	}
+	public int selectTicketDelInt(String id) {
+		return ticketDAO.selectTicketDelInt(id);
 	}
 	//5-3. 예매 delete
 	public int ticketDelete(int ticNum) {
@@ -99,6 +105,9 @@ public class TicketService {
 	//5-4. 관심리스트 조회
 	public List<WishPerVO> selectWish_mypage(String id) {
 		return ticketDAO.selectWish_mypage(id);
+	}
+	public int selectWish_mypageInt(String id) {
+		return ticketDAO.selectWish_mypageInt(id);
 	}
 	//5-5. 로그아웃 id = null
 	//5-6. 탈퇴 가능 확인

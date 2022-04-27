@@ -384,6 +384,21 @@ public class TicketDAO {
 		}
 		return ticperlist;
 	}
+	//예매 확인 (NULL확인)
+	public int selectTicketBuyInt(String id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TICKET_BUY);
+			pst.setString(1, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
+	}
 	
 	// 5-3. 예매 취소 -> 가능 조회
 	public List<TicketWishPerVO> selectTicketDel(String id) {
@@ -403,6 +418,21 @@ public class TicketDAO {
 			DBUtil.dbClose(rs, pst, conn);
 		}
 		return ticperlist;
+	}
+	//예매 취소 (NULL확인)
+	public int selectTicketDelInt(String id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_TICKET_SEARCH);
+			pst.setString(1, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// delete ticket
@@ -439,6 +469,21 @@ public class TicketDAO {
 			DBUtil.dbClose(rs, pst, conn);
 		}
 		return wishperlist;
+	}
+	//관심리스트 (NULL확인)
+	public int selectWish_mypageInt(String id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_MYPAGE);
+			pst.setString(1, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	// 5-5. 로그아웃 id = null
