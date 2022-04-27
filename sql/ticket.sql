@@ -165,6 +165,7 @@ FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO
 WHERE w.M_ID = 'id4'
 AND p.per_seat <> 0
 AND w.WISH_SEE ='N'
+AND PER_DATE > sysdate
 ORDER BY w.WISH_NO ;--지난공연 제외
 ----1.예매하기 (N만 가능함)		-
 		--@@공연넘버(NO) 선택하세요 

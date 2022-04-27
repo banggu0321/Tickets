@@ -34,6 +34,10 @@ public class TicketView {
 			System.out.println(wish);
 		}
 	}
+	public static void printWishNull(String id) {
+		System.out.println("wishlist를 추가하세요");
+	}
+	
 
 	public static void printTicBuy(List<TicketWishPerVO> ticbuylist) {
 		System.out.println("-------------------------------");

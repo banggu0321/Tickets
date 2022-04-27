@@ -48,6 +48,9 @@ public class TicketService {
 	public List<WishPerVO> selectWish_Forbuy(String id) {
 		return ticketDAO.selectWish_Forbuy(id);
 	}
+	public int selectWish_Forbuy_Int(String id) {
+		return ticketDAO.selectWish_Forbuy_Int(id);
+	}
 	//4-2. insert, update(ÁÂ¼®-1, See->Y)
 	public int ticketInsert(TicketVO ticket) {
 		return ticketDAO.ticketInsert(ticket);

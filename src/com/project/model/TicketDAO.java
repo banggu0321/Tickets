@@ -34,6 +34,7 @@ public class TicketDAO {
 					+ " WHERE w.M_ID = ?"
 					+ " AND p.per_seat <> 0"
 					+ " AND w.WISH_SEE ='N'"
+					+ " AND PER_DATE > sysdate"
 					+ " ORDER BY w.WISH_NO";
 	static final String SQL_INSERT_TICKET = "INSERT INTO TICKET VALUES(seq_ticno.nextval, ?, sysdate)";
 	static final String SQL_TICKET_SELECT_PER = 
@@ -258,6 +259,20 @@ public class TicketDAO {
 			DBUtil.dbClose(rs, pst, conn);
 		}
 		return wishperlist;
+	}
+	public int selectWish_Forbuy_Int(String id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_SELECT_WISH_FOR_BUY);
+			pst.setString(1, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	private WishPerVO wishperlist(ResultSet rs) throws SQLException {
