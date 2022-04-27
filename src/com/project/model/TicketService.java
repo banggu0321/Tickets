@@ -81,13 +81,16 @@ public class TicketService {
 	public List<WishPerVO> selectWish_mypage(String id) {
 		return ticketDAO.selectWish_mypage(id);
 	}
-	//5-5. ·Î±×¾Æ¿ô==?
+	//5-5. ·Î±×¾Æ¿ô id = null
 	//5-6. Å»Åð °¡´É È®ÀÎ
-	public List<TicketWishPerVO> selectMemDel(String id) {
+	public int selectMemDel(String id) {
 		return ticketDAO.selectMemDel(id);
 	}
+//	public int selectMemPWDel (String id, String pw) {
+//		return ticketDAO.selectMemPWDel(id, pw);
+//	}
 	//5-6. delete member
-	public int memberDelete(int mem_id) {
-		return ticketDAO.memberDelete(mem_id);
+	public int memberDelete(String id) {
+		return ticketDAO.memberDelete(id);
 	}
 }

@@ -49,19 +49,25 @@ public class TicketDAO {
 					+ "					JOIN PERFORMANCE p USING(per_no)"
 					+ " WHERE M_ID = ?"
 					+ " ORDER BY t.TIC_NO";
-	static final String SQL_SELECT_TICKET_DEL_SEARCH = 
+	static final String SQL_DELETE_TICKET_SEARCH = 
 					"SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY"
 					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
 					+ "					JOIN PERFORMANCE p USING(per_no)"
 					+ " WHERE M_ID = ?"
 					+ " AND p.per_date - 1 > sysdate"
 					+ " ORDER BY t.TIC_NO";
-	static final String SQL_SELECT_TICKET_DEL = "DELETE FROM TICKET WHERE tic_no = ?";
+	static final String SQL_DELETE_TICKET = "DELETE FROM TICKET WHERE tic_no = ?";
 	static final String SQL_SELECT_WISH_MYPAGE = 
 					"SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE"
 					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
 					+ " WHERE M_ID = ?"
 					+ " ORDER BY w.WISH_NO";
+	static final String SQL_DELETE_MEM_SEARCH = ""
+					+ "SELECT t.TIC_NO, p.PER_DATE"
+					+ " FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)"
+					+ "					JOIN PERFORMANCE p USING(per_no)"
+					+ " WHERE M_ID = ? AND p.PER_DATE > sysdate";
+	static final String SQL_DELETE_MEM = "DELETE FROM MEMBER WHERE M_ID = ?";
 	
 	// 1. 회원가입
 	public int memberInsert(MemberVO mem) {
@@ -377,7 +383,7 @@ public class TicketDAO {
 		List<TicketWishPerVO> ticperlist = new ArrayList<>();
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_TICKET_DEL_SEARCH);
+			pst = conn.prepareStatement(SQL_DELETE_TICKET_SEARCH);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
@@ -412,7 +418,7 @@ public class TicketDAO {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(SQL_SELECT_TICKET_DEL);
+			pst = conn.prepareStatement(SQL_DELETE_TICKET);
 			pst.setInt(1, ticNum);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -443,15 +449,40 @@ public class TicketDAO {
 		return wishperlist;
 	}
 
-	// 5-5. 로그아웃==?
+	// 5-5. 로그아웃 id = null
 	// 5-6. 탈퇴 가능 확인
-	public List<TicketWishPerVO> selectMemDel(String id) {
-		return null;
+	public int selectMemDel(String id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_DELETE_MEM_SEARCH);
+			pst.setString(1, id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(id);
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
+//	public int selectMemPWDel (String id, String pw) {
+//		return 0;
+//	}
 
 	// 5-6. delete member
-	public int memberDelete(int mem_id) {
-		return 0;
+	public int memberDelete(String mem_id) {
+		int result = 0;
+		conn = DBUtil.getConnection();
+		try {
+			pst = conn.prepareStatement(SQL_DELETE_MEM);
+			pst.setString(1, mem_id);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.dbClose(rs, pst, conn);
+		}
+		return result;
 	}
 
 	

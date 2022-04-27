@@ -15,6 +15,11 @@ public class TicketWishPerVO {
 	private String per_category ;
 	
 	public TicketWishPerVO() {}
+	public TicketWishPerVO(int tic_no, Date per_date) {
+		super();
+		this.tic_no = tic_no;
+		this.per_date = per_date;
+	}
 	
 	public TicketWishPerVO(String m_id, int tic_no, Date tic_date, String per_title, String per_location, Date per_date,
 			String per_time, String per_price, String per_cast, String per_category) {

@@ -12,7 +12,7 @@ import com.project.view.TicketView;
 public class TicketController {
 	static TicketService service = new TicketService();
 	static Scanner sc = new Scanner(System.in);
-	static String id = "id";
+	static String id = "아이디";
 	static int wish_no = 181;
 
 	public static void main(String[] args) {
@@ -37,16 +37,29 @@ public class TicketController {
 			case 53:selectTicDel();ticketDelete();break;
 			case 54: selectWish_mypage(); break;
 			case 55: logout(); break;
-			// case 56: memberDelete(); break;
+			case 56: memberDelete(); break;
 			case 6:
 				mainFlag = false;
 			}
 		}
 	}
-
-	
-
-	
+	private static void memberDelete() {
+		int ticketlist = service.selectMemDel(id);
+		if (ticketlist == 0) {
+			System.out.print("00님 탈퇴하시겠습니까? ");
+			System.out.println("1.네|2.아니오");
+			int deleteY = sc.nextInt(); //1.탈퇴 2. 뒤로가기
+			if(deleteY == 1) {
+				int result = service.memberDelete(id);
+				System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
+			}
+			else {
+				System.out.println();
+			}
+		} else {
+			System.out.println("예정된 공연이 존재합니다.");
+		}
+	}
 
 	private static int displayMain() {
 		System.out.println("|TICKET PROGRAM|===================================");
