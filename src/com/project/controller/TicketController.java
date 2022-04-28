@@ -14,6 +14,7 @@ public class TicketController {
 	static Scanner sc = new Scanner(System.in);
 	static String id = null;
 	static int wish_no = 0;
+	static int tic_no = 0;
 
 	public static void main(String[] args) {
 		boolean mainFlag = true;
@@ -87,7 +88,7 @@ public class TicketController {
 		if(result >= 1) {
 			TicketView.printPer(service.selectPer_Title(title));
 			wishlistInsert(); 
-		}else TicketView.printPerNull(id);
+		}else TicketView.printPerNull();
 	}
 
 	private static void selectPer_Cat() {
@@ -105,25 +106,26 @@ public class TicketController {
 		if(result >= 1) {
 			TicketView.printPer(service.selectPer_Cat(cat));
 			wishlistInsert(); 
-		}else TicketView.printPerNull(id);
+		}else TicketView.printPerNull();
 	}
 	private static void selectAll() {
 		int result = service.selectAllInt();
 		if(result >= 1) {
 			TicketView.printPer(service.selectAll());
 			wishlistInsert(); 
-		}else TicketView.printPerNull(id);
+		}else TicketView.printPerNull();
 	}
 	private static void selectPossible() {
 		int result = service.selectPossibleInt();
 		if(result >= 1) {
 			TicketView.printPer(service.selectPossible());
 			wishlistInsert(); 
-		}else TicketView.printPerNull(id);
+		}else TicketView.printPerNull();
 	}
 	private static void wishlistInsert() {
 		if(id != null) {
 			System.out.println("[1]WISHLIST 추가 [2]뒤로가기");
+			System.out.print(">>");
 			int add = sc.nextInt();
 			if(add == 1) {
 				WishlistVO wishlist = new WishlistVO();
@@ -143,7 +145,7 @@ public class TicketController {
 		if(id != null) {
 		wishForBuy(); 
 		}
-		else System.out.println("[알림]로그인이 필요합니다.");
+		else TicketView.printNeedLogin();
 	}
 	private static void wishForBuy() {
 		int result = service.selectWish_Forbuy_Int(id);
@@ -153,7 +155,7 @@ public class TicketController {
 			ticSeatUpdate(); 
 			ticWishUpdate(); 
 			wish_no = 0;
-		}else TicketView.printWishNull(id);
+		}else TicketView.printWishNull();
 	}
 
 	private static void ticketInsert() {
@@ -179,6 +181,7 @@ public class TicketController {
 		System.out.println(result > 0 ? "*WishUpdate" : "*WishUpdate FAIL");
 		System.out.println();
 	}
+	
 	private static void displayMypage() {
 		if(id != null) {
 			boolean Flag = true;
@@ -187,37 +190,36 @@ public class TicketController {
 				System.out.print("선택>>");
 				int select = sc.nextInt();
 				switch (select) {
-				case 1: pwUpdate();break;
-				case 2: selectTicBuy();break;
-				case 3: selectTicDel();break;
+				case 1: pwUpdate(); break;
+				case 2: selectTicBuy(); break;
+				case 3: selectTicDel(); break;
 				case 4: selectWish_mypage(); break;
-				case 5: logout(); Flag = false;
-				case 6: memberDelete(); Flag = false;
+				case 5: logout(); Flag = false; break; 
+				case 6: memberDelete(); Flag = false; break; 
 				case 7: Flag = false;
 				}
 			}
-		}else {System.out.println("[알림]로그인이 필요합니다.");}
+		}else TicketView.printNeedLogin();
 	}
 	private static void pwUpdate() {
-		id = null;
 		MemberVO memlist = new MemberVO();
 		System.out.print("ID : ");
-		id = sc.next();
+		String idconfirm = sc.next();
 		System.out.print("PASSWORD : ");
 		String pw = sc.next();
-		int result = service.memUpdateSearch(memlist, id, pw);
-		if (result == 1) {
-			System.out.print("NEW PASSWORD : ");
-			pw = sc.next();
-			int update = service.pwUpdate(memlist, id, pw);
-			System.out.println(update > 0 ? "[알림]success " : "[알림]실패");
-		} else {
-			System.out.println("[알림] 오류");
-		}
+		if(id == idconfirm) {
+			int result = service.memUpdateSearch(memlist, id, pw);
+			if (result == 1) {
+				System.out.print("NEW PASSWORD : ");
+				pw = sc.next();
+				int update = service.pwUpdate(memlist, id, pw);
+				System.out.println(update > 0 ? "[알림]success " : "[알림]실패");
+			} else 	System.out.println("[알림] 아이디/비밀번호 입력오류");
+		}else System.out.println("[알림] 아이디/비밀번호 입력오류");
+		
 	}
 
 	private static void selectTicBuy() {
-		//TicketView.printTicBuy(service.selectTicketBuy(id));
 		int result = service.selectTicketBuyInt(id);
 		if(result >= 1) {
 			TicketView.printTicBuy(service.selectTicketBuy(id));
@@ -229,20 +231,57 @@ public class TicketController {
 		if(result >= 1) {
 			TicketView.printTicBuy(service.selectTicketDel(id));
 			ticketDelete();
+			ticDelWishUpdate();
+			ticDelSeatUpdate(); 
+			tic_no = 0;
+			wish_no = 0;
 		}else TicketView.printTicDelNull(id);
 	}
-
+	
 	private static void ticketDelete() {
-		System.out.println("[1]WISHLIST 추가 [2]뒤로가기");
+		System.out.println("[1]예매취소 [2]뒤로가기");
+		System.out.print(">>");
 		int add = sc.nextInt();
 		if(add == 1) {
 			System.out.print("티켓번호 : ");
-			int result = service.ticketDelete(sc.nextInt());
-			System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
+			tic_no = sc.nextInt();
+//			int result = service.ticketDelete(tic_no);
+//			System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
+			System.out.println("*tic_no:" + tic_no);
 		} else System.out.println();
 	}
+	
+	private static void ticDelWishUpdate() {
+		System.out.println("*tic_no:" + tic_no);
+		wish_no = service.ticDelWishno(tic_no);
+		System.out.println("*wish_no:" + wish_no);
+		int update = service.ticDelUpdateWish(wish_no);
+		System.out.println(update > 0 ? "*WishUpdate" : "*WishUpdate FAIL");
+	}
+
+	private static void ticDelSeatUpdate() {
+		int per_no = service.ticDelPerno(wish_no);
+		System.out.println("*per_no:" + per_no);
+		int update = service.ticDelUpdateSeat(per_no);
+		System.out.println(update > 0 ? "*SeatUpdate" : "*SeatUpdate FAIL");
+	}
+//	private static void ticSeatUpdate() {
+//		PerformanceVO perlist = new PerformanceVO();
+//		int per_no = service.ticSeatSelect(wish_no);
+//		System.out.println("*공연번호:"+per_no);
+//		int update = service.ticSeatUpdate(perlist, per_no);
+//		System.out.println(update > 0 ? "*SeatUpdate" : "*SeatUpdate FAIL");
+//	}
+//
+//	private static void ticWishUpdate() {
+//		WishlistVO wishlist = new WishlistVO();
+//		int result = service.ticWishUpdate(wishlist, wish_no);
+//		System.out.println(result > 0 ? "*WishUpdate" : "*WishUpdate FAIL");
+//		System.out.println();
+//	}
+
+	
 	private static void selectWish_mypage() {
-		//TicketView.printWish(service.selectWish_mypage(id));
 		int result = service.selectWish_mypageInt(id);
 		if(result >= 1) {
 			TicketView.printWish(service.selectWish_mypage(id));
@@ -250,7 +289,7 @@ public class TicketController {
 	}
 	private static void logout() {
 		id = null;
-		System.out.println("[알림]로그아웃되었습니다.");
+		System.out.println("[알림]로그아웃되었습니다.\n");
 	}
 	private static void memberDelete() {
 		int ticketlist = service.selectMemDel(id);
@@ -265,7 +304,7 @@ public class TicketController {
 				if(confirmPW == 1) {
 				int result = service.memberDelete(id);
 					System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
-				}
+				}else System.out.println("비밀번호 입력오류");
 			}
 			else {
 				System.out.println();

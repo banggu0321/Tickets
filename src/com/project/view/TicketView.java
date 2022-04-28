@@ -17,6 +17,10 @@ public class TicketView {
 			System.out.println("[알림] 로그인 실패");
 		return null;
 	}
+
+	public static void printNeedLogin() {
+		System.out.println("[알림]로그인이 필요합니다.\n");
+	}
 	
 	public static void printPer(List<PerformanceVO> perlist) {
 		System.out.println("-------------------------------");
@@ -33,7 +37,7 @@ public class TicketView {
 			System.out.println("-------------------------------");
 		}
 	}
-	public static void printPerNull(String id) {
+	public static void printPerNull() {
 		System.out.println("[알림]검색결과가 없습니다.\n");
 	}
 
@@ -53,7 +57,7 @@ public class TicketView {
 			System.out.println("-------------------------------");
 		}
 	}
-	public static void printWishNull(String id) {
+	public static void printWishNull() {
 		System.out.println("[알림]wishlist를 추가하세요\n");
 	}
 	
@@ -75,7 +79,7 @@ public class TicketView {
 	}
 
 	public static void printTicBuyNull(String id) {
-		System.out.println("[알림]예매내역이 없습니다.\n");
+		System.out.println("[알림]"+id+"님의 예매내역이 없습니다.\n");
 	}
 
 	public static void printTicDelNull(String id) {
@@ -83,11 +87,7 @@ public class TicketView {
 	}
 
 	public static void printWishMyNull(String id) {
-		System.out.println("[알림]wishlist가 비었습니다.\n");
+		System.out.println("[알림]"+id+"wishlist가 비었습니다.\n");
 	}
 
-//	public static void printPer(int wishlistInsertSearch) {
-//		System.out.println(wishlistInsertSearch);
-//	}
-	
 }

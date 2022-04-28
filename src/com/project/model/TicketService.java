@@ -102,6 +102,18 @@ public class TicketService {
 	public int ticketDelete(int ticNum) {
 		return ticketDAO.ticketDelete(ticNum);
 	}
+	public int ticDelWishno(int tic_no) {
+		return ticketDAO.ticDelWishno(tic_no);
+	}
+	public int ticDelUpdateWish(int wish_no) {
+		return ticketDAO.ticDelUpdateWish(wish_no);
+	}
+	public int ticDelPerno(int wish_no) {
+		return ticketDAO.ticDelPerno(wish_no);
+	}
+	public int ticDelUpdateSeat(int per_no) {
+		return ticketDAO.ticDelUpdateSeat(per_no);
+	}
 	//5-4. 관심리스트 조회
 	public List<WishPerVO> selectWish_mypage(String id) {
 		return ticketDAO.selectWish_mypage(id);

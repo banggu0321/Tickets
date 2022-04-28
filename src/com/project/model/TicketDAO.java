@@ -455,11 +455,11 @@ public class TicketDAO {
 		int wish_no = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISHNO_TICNO);
 			pst.setInt(1, tic_no);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				wish_no = rs.getInt("wish_no");
+				wish_no = rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -469,11 +469,11 @@ public class TicketDAO {
 		return wish_no;
 	}
 	//update_wish
-	public int ticDelUpdateWish(WishlistVO tic_wish, int wish_no) {
+	public int ticDelUpdateWish(int wish_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_WISH);
+			pst = conn.prepareStatement(TicketSQL.SQL_UPDATE_DEL_TICKET_WISH);
 			pst.setInt(1, wish_no);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
@@ -489,11 +489,11 @@ public class TicketDAO {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
+			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_PERNO_WISHNO);
 			pst.setInt(1, wish_no);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				wish_no = rs.getInt("wish_no");
+				per_no = rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -503,11 +503,11 @@ public class TicketDAO {
 		return per_no;
 	}
 	//update_seat
-	public int ticDelUpdateSeat(PerformanceVO tic_seat, int per_no) {
+	public int ticDelUpdateSeat(int per_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
-			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_UPDATE_SEAT);
+			pst = conn.prepareStatement(TicketSQL.UPDATE_DEL_TICKET_SEAT);
 			pst.setInt(1, per_no);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
