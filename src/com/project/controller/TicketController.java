@@ -245,8 +245,8 @@ public class TicketController {
 		if(add == 1) {
 			System.out.print("티켓번호 : ");
 			tic_no = sc.nextInt();
-//			int result = service.ticketDelete(tic_no);
-//			System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
+			int result = service.ticketDelete(tic_no);
+			System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
 			System.out.println("*tic_no:" + tic_no);
 		} else System.out.println();
 	}
@@ -265,21 +265,6 @@ public class TicketController {
 		int update = service.ticDelUpdateSeat(per_no);
 		System.out.println(update > 0 ? "*SeatUpdate" : "*SeatUpdate FAIL");
 	}
-//	private static void ticSeatUpdate() {
-//		PerformanceVO perlist = new PerformanceVO();
-//		int per_no = service.ticSeatSelect(wish_no);
-//		System.out.println("*공연번호:"+per_no);
-//		int update = service.ticSeatUpdate(perlist, per_no);
-//		System.out.println(update > 0 ? "*SeatUpdate" : "*SeatUpdate FAIL");
-//	}
-//
-//	private static void ticWishUpdate() {
-//		WishlistVO wishlist = new WishlistVO();
-//		int result = service.ticWishUpdate(wishlist, wish_no);
-//		System.out.println(result > 0 ? "*WishUpdate" : "*WishUpdate FAIL");
-//		System.out.println();
-//	}
-
 	
 	private static void selectWish_mypage() {
 		int result = service.selectWish_mypageInt(id);
