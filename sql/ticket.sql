@@ -2,26 +2,26 @@
 --TICKETS
 --========================================
 
---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ticketsï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+--°ü¸®ÀÚ °èÁ¤À¸·Î tickets°èÁ¤ »ý¼º
 --CREATE USER TICKETS IDENTIFIED BY 0321;
 
---ticketsï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+--tickets±ÇÇÑ (¸ðµç ±ÇÇÑ)
 --GRANT CONNECT,RESOURCE,UNLIMITED TABLESPACE TO TICKETS IDENTIFIED BY 0321;
 --ALTER USER TICKETS DEFAULT TABLESPACE USERS;
 --ALTER USER TICKETS TEMPORARY TABLESPACE TEMP;
 
---ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½
+--»ç¿ëÀÚ»èÁ¦
 --SQL> drop user ticket cascade;
 
---======ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½È®ï¿½ï¿½==============================
+--======°èÁ¤³» Å×ÀÌºíÈ®ÀÎ==============================
 SELECT * FROM user_tables;
 SELECT * FROM user_sequences;
 SELECT * FROM USER_CONSTRAINTS ;
 
---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+--Á¦¾àÁ¶°Ç ±â·Ï »èÁ¦
 purge recycleBIN;
 
---===ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½=================================
+--===Å×ÀÌºí »ý¼º=================================
 --Member
 CREATE TABLE MEMBER(
 	m_id varchar2(20) CONSTRAINT member_id_pk PRIMARY KEY,
@@ -42,7 +42,7 @@ CREATE TABLE PERFORMANCE(
 	per_cast VARCHAR2(10) NOT NULL,
 	per_category VARCHAR2(20) NOT NULL,
 	per_seat NUMBER NOT null,
- 	constraint per_category_ck check(per_category in ('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½Ü¼ï¿½Æ®','ï¿½ï¿½ï¿½ï¿½', 'Å¬ï¿½ï¿½ï¿½ï¿½'))
+ 	constraint per_category_ck check(per_category in ('¹ÂÁöÄÃ','ÄÜ¼­Æ®','¿¬±Ø', 'Å¬·¡½Ä'))
 );
 
 --Wishlist
@@ -65,80 +65,80 @@ CREATE TABLE TICKET(
 	constraint tic_wish_no_fk foreign key(wish_no) references wishlist(wish_no) ON DELETE CASCADE
 );
 
---ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½È¸
+--Å×ÀÌºí Á¶È¸
 SELECT * FROM "MEMBER" m;
 SELECT * FROM PERFORMANCE ;
 SELECT * FROM wishlist;
 SELECT * FROM ticket;
 
---ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
+--Å×ÀÌºí »èÁ¦
 DROP TABLE MEMBER cascade constraint;
 DROP TABLE performance cascade constraint;
 DROP TABLE wishlist cascade CONSTRAINT ;
 DROP TABLE ticket cascade CONSTRAINT ;
 
 
---===ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½=================================
+--===½ÃÄö½º »ý¼º=================================
 --SEQUENCE
 CREATE SEQUENCE SEQ_PERNO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE SEQ_TICNO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE SEQ_WISHNO INCREMENT BY 1 START WITH 1;
 
---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+--½ÃÄö½º »èÁ¦
 DROP SEQUENCE SEQ_PERNO;
 DROP SEQUENCE SEQ_TICNO;
 DROP SEQUENCE SEQ_WISHNO;
 
 
---===JDBCï¿½ï¿½ï¿½Î±×·ï¿½ SQLï¿½Û¼ï¿½=================================
---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
---INSERT INTO MEMBER VALUES('admin','admin1234','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','admin@gmai.com','010-1234-5678');
---ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½(ï¿½Ù¸ï¿½ sqlï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½)
---1.ï¿½ï¿½È¸(ï¿½ï¿½ï¿½ï¿½,  È¸ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½) ->ï¿½ï¿½Ã¼ï¿½ï¿½È¸
+--===JDBCÇÁ·Î±×·¥ SQLÀÛ¼º=================================
+--°ü¸®ÀÚ ¾ÆÀÌµð ºñ¹ø ¼³Á¤
+--INSERT INTO MEMBER VALUES('admin','admin1234','°ü¸®ÀÚ','admin@gmai.com','010-1234-5678');
+--°ü¸®ÇÏ±â(´Ù¸¥ sqlÆÄÀÏ ¸¸µé±â)
+--1.Á¶È¸(°ø¿¬,  È¸¿ø, ¿¹¸Å) ->ÀüÃ¼Á¶È¸
 SELECT * FROM PERFORMANCE;
 SELECT * FROM MEMBER;
 SELECT t.TIC_NO, m.M_ID, m.M_NAME, p.PER_NO
 FROM WISHLIST w RIGHT OUTER join TICKET t ON w.WISH_NO = t.WISH_NO 
 				JOIN PERFORMANCE p ON w.per_no = p.PER_NO 
 				JOIN MEMBER m ON w.M_ID = m.M_ID;
---2.ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½Â¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'ï¿½ï¿½ï¿½Ì´ï¿½','ï¿½ï¿½ï¿½ç½ºï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä«ï¿½ï¿½È¦',to_date('2022-05-10 19:00','yyyy-mm-dd hh24:mi'),'160ï¿½ï¿½','150000ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È­È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'60ï¿½ï¿½','100000ï¿½ï¿½','ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'ï¿½Æ¸ï¿½ï¿½','ï¿½ï¿½ï¿½',to_date('2022-04-02 19:30','yyyy-mm-dd hh24:mi'),'60ï¿½ï¿½','100000ï¿½ï¿½','ï¿½Ú¸ï¿½','ï¿½Ü¼ï¿½Æ®','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4ï¿½ï¿½1ï¿½Ï¿ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60ï¿½ï¿½','100000ï¿½ï¿½','ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5ï¿½ï¿½1ï¿½Ï¿ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60ï¿½ï¿½','100000ï¿½ï¿½','ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','10');
+--2.°ø¿¬ µî·Ï, ÁÂ¼® ¼ö º¯°æ, »èÁ¦
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'¾ÆÀÌ´Ù','ºí·ç½ºÄù¾î ½ÅÇÑÄ«µåÈ¦',to_date('2022-05-10 19:00','yyyy-mm-dd hh24:mi'),'160ºÐ','150000¿ø','À±°øÁÖ','¹ÂÁöÄÃ','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'¿ô´Â ³²ÀÚ','¼¼Á¾¹®È­È¸°ü ´ë±ØÀå',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'60ºÐ','100000¿ø','±è¸ð¾¾','¹ÂÁöÄÃ','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'¾Æ¸óµå','Àå¼Ò',to_date('2022-04-02 19:30','yyyy-mm-dd hh24:mi'),'60ºÐ','100000¿ø','¹Ú¸ð¾¾','ÄÜ¼­Æ®','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4¿ù1ÀÏ¿¬±Ø','Àå¼Ò',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60ºÐ','100000¿ø','¹æ¸ð¾¾','¿¬±Ø','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5¿ù1ÀÏ¿¬±Ø','Àå¼Ò',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60ºÐ','100000¿ø','¹æ¸ð¾¾','¿¬±Ø','10');
 UPDATE PERFORMANCE SET per_seat=0 WHERE per_no = 1;
 DELETE FROM PERFORMANCE WHERE per_no = 1;
 
---=====mainï¿½ï¿½ï¿½ï¿½ï¿½ï¿½==========================================
+--=====mainÆäÀÌÁö==========================================
 --(1~5)
-		--@@ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½>>
---1. È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-INSERT INTO MEMBER VALUES('id','pw','ï¿½ï¿½','aa','101');
-INSERT INTO MEMBER VALUES('id2','pw','ï¿½ï¿½','aa','101');
-INSERT INTO MEMBER VALUES('id3','pw','ï¿½ï¿½','aa','101');
-INSERT INTO MEMBER VALUES('d','d','ï¿½ï¿½','aa','101');
---2. ï¿½Î±ï¿½ï¿½ï¿½(success,fail)
+		--@@ÀÛ¾÷À» ¼±ÅÃÇÏ¼¼¿ä>>
+--1. È¸¿ø°¡ÀÔ
+INSERT INTO MEMBER VALUES('id','pw','±è','aa','101');
+INSERT INTO MEMBER VALUES('id2','pw','±è','aa','101');
+INSERT INTO MEMBER VALUES('id3','pw','±è','aa','101');
+INSERT INTO MEMBER VALUES('d','d','±è','aa','101');
+--2. ·Î±×ÀÎ(success,fail)
 SELECT M_ID FROM MEMBER WHERE M_ID ='id' AND M_PW ='pw2';
-		--@@.JAVA id->static/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(String user_id = null)
-		--@@[ï¿½Ë¸ï¿½] **ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ÎµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
-		--@@[ï¿½Ë¸ï¿½] È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
+		--@@.JAVA id->static/º¯¼öÀ¸·Î »©³õ±â(String user_id = null)
+		--@@[¾Ë¸²] **´Ô ·Î±×ÀÎµÇ¾ú½À´Ï´Ù.
+		--@@[¾Ë¸²] È¸¿øÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.
 
---3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¸:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½, Ä«ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ã¼ï¿½ï¿½È¸->>ï¿½ï¿½ï¿½Éµï¿½ï¿½ --ï¿½Ú·Î°ï¿½ï¿½ï¿½While
----- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-SELECT * FROM PERFORMANCE WHERE per_title LIKE '%'+'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'+'%' ORDER BY PER_NO ;
-SELECT * FROM PERFORMANCE WHERE per_category = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½' ORDER BY PER_NO ;
-SELECT * FROM PERFORMANCE WHERE per_category = 'ï¿½Ü¼ï¿½Æ®' ORDER BY PER_NO ;
-SELECT * FROM PERFORMANCE WHERE per_category = 'ï¿½ï¿½ï¿½ï¿½' ORDER BY PER_NO ;
-SELECT * FROM PERFORMANCE WHERE per_category = 'Å¬ï¿½ï¿½ï¿½ï¿½' ORDER BY PER_NO ;
+--3. °ø¿¬Á¶È¸:Á¦¸ñº°À¸·Î °Ë»ö, Ä«Å×°í¸®º°, ¿¹¸Å°¡´ÉÇÑ °ø¿¬, ÀüÃ¼Á¶È¸->>°ü½Éµî·Ï --µÚ·Î°¡±âWhile
+---- Áö³­ °ø¿¬°ú ¿¹¸Å°¡´ÉÇÑ °ø¿¬ ³ª´²¼­ Ãâ·Â
+SELECT * FROM PERFORMANCE WHERE per_title LIKE '%¾ÆÀÌ%' ORDER BY PER_NO ; --fail
+SELECT * FROM PERFORMANCE WHERE per_category = '¹ÂÁöÄÃ' ORDER BY PER_NO ;
+SELECT * FROM PERFORMANCE WHERE per_category = 'ÄÜ¼­Æ®' ORDER BY PER_NO ;
+SELECT * FROM PERFORMANCE WHERE per_category = '¿¬±Ø' ORDER BY PER_NO ;
+SELECT * FROM PERFORMANCE WHERE per_category = 'Å¬·¡½Ä' ORDER BY PER_NO ;
 SELECT * FROM PERFORMANCE ORDER BY PER_NO ;
 SELECT * FROM PERFORMANCE WHERE PER_DATE > sysdate ORDER BY PER_NO ;
-		--@@syso>[ï¿½Ë¸ï¿½]ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.
-		--@@syso>wishlistï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½
+		--@@syso>[¾Ë¸²]·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.
+		--@@syso>wishlist¿¡ ´ãÀ» °ø¿¬ÀÇ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä
 
---wishlist ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ wish_see = 'Y' ï¿½ï¿½ ï¿½ï¿½ï¿½ > @@[ï¿½Ë¸ï¿½]ï¿½ß°ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
---wishlist ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ > @@[ï¿½Ë¸ï¿½]ï¿½ß°ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
---ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½î°¡ï¿½ï¿½ ï¿½Ê°ï¿½ -> m_id = ï¿½ï¿½Â¼ï¿½ï¿½ && per_no = ï¿½Ø´ï¿½ && wish_see = 'N' ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ì¸¸ insert
+--wishlist ´ã°ÜÀÖÁö¸¸ wish_see = 'Y' ÀÎ °æ¿ì > @@[¾Ë¸²]Ãß°¡µÇ¾ú½À´Ï´Ù.
+--wishlist ´ã°ÜÀÖÁö ¾ÊÀ»°æ¿ì > @@[¾Ë¸²]Ãß°¡µÇ¾ú½À´Ï´Ù.
+--Áßº¹À¸·Î °ª µé¾î°¡Áö ¾Ê°Ô -> m_id = ¾îÂ¼±¸ && per_no = ÇØ´ç && wish_see = 'N' °¡ ¾Æ´Ñ °æ¿ì¸¸ insert
 INSERT INTO WISHLIST
 SELECT seq_wishno.nextval, 'id','1', 'N'
 FROM dual
@@ -148,7 +148,7 @@ WHERE NOT EXISTS (
 	WHERE m_id = 'id'
 	AND per_no = '1'
 	AND wish_see ='N');
--->ï¿½Ð¸ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½Ç°Ë»ï¿½ ï¿½ï¿½ result ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½
+-->ºÐ¸®ÇØ¼­ Á¶°Ç°Ë»ö ÈÄ result °ªÀ¸·Î Á¶°Ç¹® ¸¸µë
 SELECT M_ID , PER_NO , WISH_SEE 
 FROM WISHLIST
 WHERE m_id = 'id'''
@@ -158,65 +158,81 @@ INSERT INTO WISHLIST VALUES(seq_wishno.nextval, 'id','10', 'N');
 SELECT * FROM WISHLIST w2;
 
 
---4. ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ (ï¿½Ø´ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½É¸ï¿½ï¿½ ï¿½ï¿½ï¿½)  w.M_ID->string ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù´Ï±ï¿½ ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½wishlistï¿½ï¿½
-		--@@<**ï¿½ï¿½ï¿½ï¿½ wishlist> OR [ï¿½Ë¸ï¿½]wishlistï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½È¸ ï¿½ï¿½ wish ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½ ->ï¿½Ú·Î°ï¿½ï¿½ï¿½
-SELECT w.M_ID, w.WISH_NO ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
+--4. ¿¹¸ÅÇÏ±â (ÇØ´ç È¸¿øÀÇ °ü½É¸ñ·Ï Ãâ·Â)  w.M_ID->string °ªÀ¸·Î °¡Áö°í ´Ù´Ï±â ¿¹¸Å°¡´ÉÇÑwishlist¸¸
+		--@@<**´ÔÀÇ wishlist> OR [¾Ë¸²]wishlist°¡ ºñ¾ú½À´Ï´Ù. Á¶È¸ ÈÄ wish µî·ÏÇØÁÖ¼¼¿ä ->µÚ·Î°¡±â
+SELECT w.M_ID, w.WISH_NO °ø¿¬³Ñ¹ö, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
 FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
 WHERE w.M_ID = 'id4'
 AND p.per_seat <> 0
 AND w.WISH_SEE ='N'
 AND PER_DATE > sysdate
-ORDER BY w.WISH_NO ;--ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-----1.ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ (Nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)		-
-		--@@ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½(NO) ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ 
+ORDER BY w.WISH_NO ;--Áö³­°ø¿¬ Á¦¿Ü
+----1.¿¹¸ÅÇÏ±â (N¸¸ °¡´ÉÇÔ)		-
+		--@@°ø¿¬³Ñ¹ö(NO) ¼±ÅÃÇÏ¼¼¿ä 
 INSERT INTO TICKET VALUES(seq_ticno.nextval, 186, sysdate);
---ï¿½ï¿½ï¿½É¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ per_noï¿½ï¿½ï¿½ï¿½ï¿½Í¾ï¿½ï¿½ï¿½..--1
+--°ü½É¹øÈ£¸¦ °¡Áö°í per_no°¡Á®¿Í¾ßÇÔ..--1
 SELECT w.per_no
 FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO 
 WHERE t.WISH_NO = 182;
 
 UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = 11;
 
---ï¿½ï¿½ï¿½É¹ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Í¾ï¿½ï¿½ï¿½--2
+--°ü½É¹øÈ£°¡Áö°í ¿Í¾ßÇÔ--2
 UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = 166;
-		--@@[ï¿½Ë¸ï¿½]ï¿½ï¿½ï¿½Å°ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
-----2.ï¿½Ú·Î°ï¿½ï¿½ï¿½while
---5. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-----1.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½)- id, pw ï¿½Ù½ï¿½ï¿½Ô·ï¿½
+		--@@[¾Ë¸²]¿¹¸Å°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.
+----2.µÚ·Î°¡±âwhile
+--5. ¸¶ÀÌÆäÀÌÁö
+----1.°³ÀÎÁ¤º¸¼öÁ¤(ºñ¹Ð¹øÈ£¸¸)- id, pw ´Ù½ÃÀÔ·Â
 SELECT * FROM "MEMBER" m WHERE m_id ='id' AND M_PW = 'pw2';
 UPDATE MEMBER SET m_pw='pw3' WHERE m_id ='id';
-		--@@[ï¿½Ë¸ï¿½] ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
-----2.ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ - ï¿½ï¿½È¸
-		--@@<**ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½>  w.M_ID->string ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù´Ï±ï¿½
+		--@@[¾Ë¸²] ºñ¹Ð¹øÈ£°¡ ¼öÁ¤µÇ¾ú½À´Ï´Ù.
+----2.¿¹¸ÅÈ®ÀÎ - Á¶È¸
+		--@@<**´ÔÀÇ ¿¹¸Å ³»¿ª>  w.M_ID->string °ªÀ¸·Î °¡Áö°í ´Ù´Ï±â
 SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id4'
 ORDER BY t.TIC_NO;
---3.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½
-		--@@syso>> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. \n [ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ï¿½ï¿½]
+--3.¿¹¸ÅÃë¼Ò - »èÁ¦
+		--@@syso>> ¿¹¸Å Ãë¼Ò´Â °ø¿¬ ´çÀÏÀÇ Àü³¯±îÁö¸¸ °¡´ÉÇÕ´Ï´Ù. \n [Ãë¼Ò °¡´ÉÇÑ ¿¹¸Å³»¿ª]
 SELECT w.M_ID, t.TIC_NO , t.TIC_DATE, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY 
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)
 WHERE M_ID = 'id4'
 AND p.per_date - 1 > sysdate
 ORDER BY t.TIC_NO;
-		--syso>>ï¿½ï¿½ï¿½Å¹ï¿½È£ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½
+		--syso>>¿¹¸Å¹øÈ£ÀÔ·ÂÇÏ¼¼¿ä
 DELETE FROM TICKET WHERE tic_no = 3;
 
---tic_no ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ wish_noï¿½ï¿½ï¿½ï¿½ï¿½Í¾ï¿½ï¿½ï¿½.
+--tic_no °¡Áö°í wish_no°¡Á®¿Í¾ßÇÔ.
 SELECT WISH_NO FROM TICKET WHERE TIC_NO = 3; --SELECT_WISHNO_TICNO
 UPDATE WISHLIST SET WISH_SEE = 'N' WHERE WISH_NO = 1; --UPDATE_DEL_TICKET_WISH
 SELECT PER_NO FROM WISHLIST WHERE WISH_NO = 1; --SELECT_PERNO_WISHNO
 UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT + 1 WHERE PER_NO = 5; --UPDATE_DEL_TICKET_SEAT
 
-----4.ï¿½ï¿½ï¿½É¸ï¿½ï¿½ï¿½ï¿½È¸
-SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
-FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO 
-WHERE M_ID = 'id4'
+----4.°ü½É¸ñ·ÏÁ¶È¸
+SELECT w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE  
+FROM PERFORMANCE p inner JOIN (
+	SELECT *
+	FROM (
+		SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num
+		FROM WISHLIST wf) AS wj
+	WHERE wj.num = 1
+	AND M_ID = 'd' 
+	ORDER BY wish_no) AS w
+ON w.PER_NO = p.PER_NO 
 ORDER BY w.WISH_NO;
-----5.ï¿½Î±×¾Æ¿ï¿½ id=null
-----6.Å»ï¿½ï¿½(ï¿½ï¿½ï¿½Å³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å»ï¿½ï¿½Ò°ï¿½)	>@@[ï¿½Ë¸ï¿½]Å»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+SELECT *
+FROM (SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num
+		FROM WISHLIST wf) wj
+WHERE wj.num = 1
+AND M_ID = 'd' 
+ORDER BY wish_no;
+
+WHERE M_ID = 'd' 
+;
+----5.·Î±×¾Æ¿ô id=null
+----6.Å»Åð(¿¹¸Å³»¿ª ÀÖÀ¸¸é Å»ÅðºÒ°¡)	>@@[¾Ë¸²]Å»ÅðÇÒ ¼ö ¾ø½À´Ï´Ù.
 SELECT t.TIC_NO, p.PER_DATE
 FROM WISHLIST w RIGHT OUTER join TICKET t using(wish_no)
 				JOIN PERFORMANCE p USING(per_no)

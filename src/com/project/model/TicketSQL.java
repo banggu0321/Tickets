@@ -22,7 +22,7 @@ public class TicketSQL {
 					"SELECT w.per_no"
 					+ " FROM WISHLIST w JOIN TICKET t ON t.WISH_NO = w.WISH_NO"
 					+ " WHERE t.WISH_NO = ?";
-	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = ?";//ï¿½ï¿½ï¿½Æ¾Æ¾Æ¾ï¿½
+	static final String SQL_TICKET_UPDATE_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT-1 WHERE PER_NO = ?";//À¸¾Æ¾Æ¾Æ¾Ç
 	static final String SQL_TICKET_UPDATE_WISH = "UPDATE WISHLIST SET WISH_SEE = 'Y' WHERE WISH_NO = ?";
 	static final String SQL_UPDATE_MEM_SEARCH = "SELECT * FROM MEMBER WHERE m_id =? AND M_PW = ?";
 	static final String SQL_UPDATE_MEM = "UPDATE MEMBER SET m_pw=? WHERE m_id =?";
@@ -45,9 +45,16 @@ public class TicketSQL {
 	static final String SQL_SELECT_PERNO_WISHNO = "SELECT PER_NO FROM WISHLIST WHERE WISH_NO = ?";
 	static final String UPDATE_DEL_TICKET_SEAT = "UPDATE PERFORMANCE SET PER_SEAT = PER_SEAT + 1 WHERE PER_NO = ?";
 	static final String SQL_SELECT_WISH_MYPAGE = 
-					"SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT , w.WISH_SEE"
-					+ " FROM WISHLIST w INNER JOIN PERFORMANCE p ON w.PER_NO = p.PER_NO"
-					+ " WHERE M_ID = ?"
+					"SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , p.PER_LOCATION , p.PER_DATE ,p.PER_TIME ,p.PER_PRICE ,p.PER_CAST , p.PER_CATEGORY ,p.PER_SEAT ,w.WISH_SEE"
+					+ " FROM PERFORMANCE p inner JOIN ("
+					+ "		SELECT *"
+					+ "		FROM ("
+					+ "			SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num"
+					+ "			FROM WISHLIST wf) wj"
+					+ "		WHERE wj.num = 1"
+					+ "		AND wj.M_ID = ?"
+					+ "		ORDER BY wish_no) w"
+					+ "		ON w.PER_NO = p.PER_NO"
 					+ " ORDER BY w.WISH_NO";
 	static final String SQL_DELETE_MEM_SEARCH = ""
 					+ "SELECT t.TIC_NO, p.PER_DATE"
