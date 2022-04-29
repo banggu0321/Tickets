@@ -92,7 +92,7 @@ public class TicketController {
 	}
 
 	private static void selectPer_Cat() {
-		System.out.println("1)뮤지컬 2)콘서트 3)연극 4)클래식");
+		System.out.println("1)뮤지컬 2)콘서트 3)연극 4)무용");
 		System.out.print("선택>>");
 		int select = sc.nextInt();
 		String cat = "";
@@ -100,7 +100,7 @@ public class TicketController {
 			case 1: cat = "뮤지컬"; break;
 			case 2: cat = "콘서트"; break;
 			case 3: cat = "연극"; break;
-			case 4: cat = "클래식"; break;
+			case 4: cat = "무용"; break;
 			}
 		int result = service.selectPer_CatInt(cat);
 		if(result >= 1) {

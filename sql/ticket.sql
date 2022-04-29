@@ -27,22 +27,22 @@ CREATE TABLE MEMBER(
 	m_id varchar2(20) CONSTRAINT member_id_pk PRIMARY KEY,
 	m_pw varchar2(20) CONSTRAINT member_pw_ck NOT NULL,
 	m_name VARCHAR2(20) CONSTRAINT member_name_ck NOT NULL ,
-	m_email VARCHAR2(25) CONSTRAINT member_email_ck NOT NULL ,
-	m_phone VARCHAR2(15)
+	m_email VARCHAR2(30) CONSTRAINT member_email_ck NOT NULL ,
+	m_phone VARCHAR2(20)
 );
 
 --Performance
 CREATE TABLE PERFORMANCE(
 	per_no NUMBER PRIMARY KEY,
-	per_title VARCHAR2(20) NOT NULL,
+	per_title VARCHAR2(30) NOT NULL,
 	per_location VARCHAR2(50) NOT NULL,
 	per_date DATE NOT NULL,
 	per_time VARCHAR2(10) NOT NULL,
 	per_price VARCHAR2(20) NOT NULL,
-	per_cast VARCHAR2(10) NOT NULL,
+	per_cast VARCHAR2(20) NOT NULL,
 	per_category VARCHAR2(20) NOT NULL,
 	per_seat NUMBER NOT null,
- 	constraint per_category_ck check(per_category in ('뮤지컬','콘서트','연극', '클래식'))
+ 	constraint per_category_ck check(per_category in ('뮤지컬','콘서트','연극','무용'))
 );
 
 --Wishlist
@@ -102,11 +102,15 @@ FROM WISHLIST w RIGHT OUTER join TICKET t ON w.WISH_NO = t.WISH_NO
 				JOIN PERFORMANCE p ON w.per_no = p.PER_NO 
 				JOIN MEMBER m ON w.M_ID = m.M_ID;
 --2.공연 등록, 좌석 수 변경, 삭제
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아이다','블루스퀘어 신한카드홀',to_date('2022-05-10 19:00','yyyy-mm-dd hh24:mi'),'160분','150000원','윤공주','뮤지컬','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'웃는 남자','세종문화회관 대극장',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','김모씨','뮤지컬','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'아몬드','장소',to_date('2022-04-02 19:30','yyyy-mm-dd hh24:mi'),'60분','100000원','박모씨','콘서트','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'4월1일연극','장소',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','방모씨','연극','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'5월1일연극','장소',to_date('2022-05-01 21:00','yyyy-mm-dd hh24:mi'),'60분','100000원','방모씨','연극','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'지킬앤하이드','샤롯데씨어터',to_date('2021-10-20 19:00','yyyy-mm-dd hh24:mi'),'170분','150,000원','박은태','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'데스노트','충무아트센터',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'160분','150,000원','홍광호','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'마타하리','샤롯데씨어터',to_date('2022-05-28 19:30','yyyy-mm-dd hh24:mi'),'180분','150,000원','옥주현','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'웃는 남자','세종문화회관',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'180분','150,000원','박효신','뮤지컬','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'May, Be','신한pLay스퀘어',to_date('2022-04-29 19:00','yyyy-mm-dd hh24:mi'),'120분','990,000원','케이시','콘서트','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'재즈페스티벌','올림픽공원',to_date('2022-05-27 13:00','yyyy-mm-dd hh24:mi'),'540분','165,000원','백예린','콘서트','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'라스트 세션','대학로 1관',to_date('2022-03-20 20:00','yyyy-mm-dd hh24:mi'),'90분','50,000원','신구','연극','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'쉬어매드니스','서울 대학로',to_date('2022-05-31 15:00','yyyy-mm-dd hh24:mi'),'110분','35,000원','방모씨','연극','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'해적','예술의전당 오페라극장',to_date('2022-04-20 19:00','yyyy-mm-dd hh24:mi'),'120분','30,000원','국립발레단','무용','10');
 UPDATE PERFORMANCE SET per_seat=0 WHERE per_no = 1;
 DELETE FROM PERFORMANCE WHERE per_no = 1;
 
@@ -227,7 +231,7 @@ SELECT *
 FROM (SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num
 		FROM WISHLIST wf) wj
 WHERE wj.num = 1
-AND M_ID = 'd' 
+AND M_ID =104 'd' 
 ORDER BY wish_no;
 
 WHERE M_ID = 'd' 
