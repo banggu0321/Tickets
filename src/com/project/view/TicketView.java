@@ -12,13 +12,15 @@ public class TicketView {
 	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	
 
-	public static String printLogIn(MemberVO mem) {
+	public static String printLogIn(MemberVO mem, String id) {
 		if (mem != null) {
 			System.out.println("[알림] "+ mem.getM_id() +"님 로그인되었습니다.");
-			return mem.getM_id(); }
-		else
+			return mem.getM_id(); 
+		}else {
 			System.out.println("[알림] 로그인 실패");
-		return null;
+			id = null;
+			return id;
+		}
 	}
 
 	public static void printNeedLogin() {
@@ -56,7 +58,7 @@ public class TicketView {
 			System.out.println("출연진: " + wish.getPer_cast());
 			System.out.print("카테고리: " + wish.getPer_category() + "\t");
 			System.out.print("남은좌석: " + wish.getPer_seat() + "\t");
-			System.out.println("관람여부: " + wish.getWish_see());
+			System.out.println("예매여부: " + wish.getWish_see());
 			System.out.println("---------------------------------------------------");
 		}
 	}

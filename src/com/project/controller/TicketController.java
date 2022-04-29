@@ -65,7 +65,7 @@ public class TicketController {
 		id = sc.next();
 		System.out.print("PASSWORD : ");
 		String pw = sc.next();
-		TicketView.printLogIn(service.memberLogIn(id, pw));
+		id = TicketView.printLogIn(service.memberLogIn(id, pw), id);
 		System.out.println();
 	}
 	
@@ -254,7 +254,6 @@ public class TicketController {
 	}
 	
 	private static void ticketDelFinal() {
-		System.out.println("*tic_no:" + tic_no);
 		int result = service.ticketDelete(tic_no);
 		System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
 		tic_no = 0;
@@ -272,17 +271,15 @@ public class TicketController {
 	}
 	
 	private static void ticDelWishUpdate() {
-		System.out.println("*tic_no:" + tic_no);
 		wish_no = service.ticDelWishno(tic_no);
-		System.out.println("*wish_no:" + wish_no);
 		int update = service.ticDelUpdateWish(wish_no);
 		System.out.println(update > 0 ? "*WishUpdate" : "*WishUpdate FAIL");
 	}
 
 	private static void ticDelSeatUpdate() {
 		int per_no = service.ticDelPerno(wish_no);
-		System.out.println("*per_no:" + per_no);
 		int update = service.ticDelUpdateSeat(per_no);
+		System.out.println("*per_no:" + per_no);
 		System.out.println(update > 0 ? "*SeatUpdate" : "*SeatUpdate FAIL");
 	}
 	
