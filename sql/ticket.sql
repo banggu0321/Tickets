@@ -224,7 +224,7 @@ FROM PERFORMANCE p inner JOIN (
 		SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num
 		FROM WISHLIST wf) wj
 	WHERE wj.num = 1
-	AND wj.M_ID = 'd' 
+	AND wj.M_ID = 'id' 
 	ORDER BY wish_no) w
 	ON w.PER_NO = p.PER_NO 
 ORDER BY w.WISH_NO;
@@ -233,11 +233,13 @@ SELECT *
 FROM (SELECT wf.* , ROW_NUMBER() OVER(PARTITION BY PER_NO ORDER BY wish_NO desc) AS num
 		FROM WISHLIST wf) wj
 WHERE wj.num = 1
-AND M_ID =104 'd' 
+AND M_ID ='id' 
 ORDER BY wish_no;
 
-WHERE M_ID = 'd' 
-;
+SELECT w.M_ID, w.WISH_NO, p.PER_TITLE , w.WISH_SEE  
+FROM WISHLIST w inner JOIN PERFORMANCE p ON w.per_no = p.PER_NO 
+WHERE M_ID = 'id' 
+ORDER BY wish_no;
 ----5.로그아웃 id=null
 ----6.탈퇴(예매내역 있으면 탈퇴불가)	>@@[알림]탈퇴할 수 없습니다.
 SELECT t.TIC_NO, p.PER_DATE
