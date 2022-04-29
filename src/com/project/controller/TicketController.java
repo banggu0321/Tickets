@@ -201,43 +201,66 @@ public class TicketController {
 			}
 		}else TicketView.printNeedLogin();
 	}
+	
 	private static void pwUpdate() {
 		MemberVO memlist = new MemberVO();
-		System.out.print("ID : ");
-		String idconfirm = sc.next();
 		System.out.print("PASSWORD : ");
 		String pw = sc.next();
-		if(id == idconfirm) {
-			int result = service.memUpdateSearch(memlist, id, pw);
-			if (result == 1) {
-				System.out.print("NEW PASSWORD : ");
-				pw = sc.next();
-				int update = service.pwUpdate(memlist, id, pw);
-				System.out.println(update > 0 ? "[알림]success " : "[알림]실패");
-			} else 	System.out.println("[알림] 아이디/비밀번호 입력오류");
-		}else System.out.println("[알림] 아이디/비밀번호 입력오류");
-		
+		int result = service.memUpdateSearch(memlist, id, pw);
+		if (result == 1) {
+			System.out.print("NEW PASSWORD : ");
+			pw = sc.next();
+			int update = service.pwUpdate(memlist, id, pw);
+			System.out.println(update > 0 ? "[알림]success \n" : "[알림]실패\n");
+		} else 	System.out.println("[알림] 비밀번호 입력오류\n");
 	}
+	
+//	private static void pwUpdate() {
+//		MemberVO memlist = new MemberVO();
+//		System.out.print("ID : ");
+//		String idconfirm = sc.next();
+//		System.out.println("지금아이디 : " + id);
+//		if(id == idconfirm) {
+//			System.out.print("PASSWORD : ");
+//			String pw = sc.next();
+//			int result = service.memUpdateSearch(memlist, id, pw);
+//			if (result == 1) {
+//				System.out.print("NEW PASSWORD : ");
+//				pw = sc.next();
+//				int update = service.pwUpdate(memlist, id, pw);
+//				System.out.println(update > 0 ? "[알림]success " : "[알림]실패");
+//			} else 	System.out.println("[알림] 비밀번호 입력오류");
+//		}else System.out.println("[알림] 아이디 입력오류");
+//	}
 
 	private static void selectTicBuy() {
 		int result = service.selectTicketBuyInt(id);
 		if(result >= 1) {
-			TicketView.printTicBuy(service.selectTicketBuy(id));
+			TicketView.printTicBuy(service.selectTicketBuy(id), id);
+			System.out.println();
 		}else TicketView.printTicBuyNull(id);
 	}
 
 	private static void selectTicDel() {
 		int result = service.selectTicketDelInt(id);
 		if(result >= 1) {
-			TicketView.printTicBuy(service.selectTicketDel(id));
+			TicketView.printTicBuy(service.selectTicketDel(id),id);
 			ticketDelete();
 			ticDelWishUpdate();
 			ticDelSeatUpdate(); 
-			tic_no = 0;
-			wish_no = 0;
+			ticketDelFinal();
+			System.out.println();
 		}else TicketView.printTicDelNull(id);
 	}
 	
+	private static void ticketDelFinal() {
+		System.out.println("*tic_no:" + tic_no);
+		int result = service.ticketDelete(tic_no);
+		System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
+		tic_no = 0;
+		wish_no = 0;
+	}
+
 	private static void ticketDelete() {
 		System.out.println("[1]예매취소 [2]뒤로가기");
 		System.out.print(">>");
@@ -245,9 +268,6 @@ public class TicketController {
 		if(add == 1) {
 			System.out.print("티켓번호 : ");
 			tic_no = sc.nextInt();
-			int result = service.ticketDelete(tic_no);
-			System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
-			System.out.println("*tic_no:" + tic_no);
 		} else System.out.println();
 	}
 	
@@ -289,7 +309,7 @@ public class TicketController {
 				if(confirmPW == 1) {
 				int result = service.memberDelete(id);
 					System.out.println(result > 0 ? "DELETE SUCCESS" : "DELETE FAIL");
-				}else System.out.println("비밀번호 입력오류");
+				}else System.out.println("비밀번호 입력오류\n");
 			}
 			else {
 				System.out.println();

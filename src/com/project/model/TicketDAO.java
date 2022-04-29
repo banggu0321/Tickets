@@ -461,6 +461,7 @@ public class TicketDAO {
 			while(rs.next()) {
 				wish_no = rs.getInt(1);
 			}
+			System.out.println("wish_no: "+ wish_no);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
