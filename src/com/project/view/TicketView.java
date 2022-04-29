@@ -1,5 +1,6 @@
 package com.project.view;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.project.dto.MemberVO;
@@ -8,6 +9,8 @@ import com.project.dto.TicketWishPerVO;
 import com.project.dto.WishPerVO;
 
 public class TicketView {
+	static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	
 
 	public static String printLogIn(MemberVO mem) {
 		if (mem != null) {
@@ -28,7 +31,7 @@ public class TicketView {
 			System.out.print("공연번호: " + per.getPer_no() + "\t");
 			System.out.println("공연명: " + per.getPer_title());
 			System.out.print("장소: " + per.getPer_location() + "\t");
-			System.out.println("날짜: " + per.getPer_date());
+			System.out.println("날짜: " + formatter.format(per.getPer_date()));
 			System.out.print("공연시간: " + per.getPer_time() + "\t");
 			System.out.print("가격: " + per.getPer_price() + "\t");
 			System.out.println("출연진: " + per.getPer_cast());
@@ -47,7 +50,7 @@ public class TicketView {
 			System.out.print("선택번호:" + wish.getWish_no() + "\t");
 			System.out.println("공연명: " + wish.getPer_title());
 			System.out.print("장소: " + wish.getPer_location() + "\t");
-			System.out.println("날짜: " + wish.getPer_date());
+			System.out.println("날짜: " + formatter.format(wish.getPer_date()));
 			System.out.print("공연시간: " + wish.getPer_time() + "\t");
 			System.out.print("가격: " + wish.getPer_price() + "\t");
 			System.out.println("출연진: " + wish.getPer_cast());
@@ -69,7 +72,7 @@ public class TicketView {
 			System.out.println("예매일: " + tic.getTic_date());
 			System.out.print("공연명: " + tic.getPer_title() + "\t");
 			System.out.println("장소: " + tic.getPer_location());
-			System.out.print("날짜: " + tic.getPer_date() + "\t");
+			System.out.print("날짜: " + formatter.format(tic.getPer_date()) + "\t");
 			System.out.print("공연시간: " + tic.getPer_time());
 			System.out.println("가격: " + tic.getPer_price() + "\t");
 			System.out.print("출연진: " + tic.getPer_cast() + "\t");

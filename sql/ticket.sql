@@ -106,11 +106,11 @@ INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'지킬앤하이드','샤롯데씨어터',t
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'데스노트','충무아트센터',to_date('2022-04-01 21:00','yyyy-mm-dd hh24:mi'),'160분','150,000원','홍광호','뮤지컬','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'마타하리','샤롯데씨어터',to_date('2022-05-28 19:30','yyyy-mm-dd hh24:mi'),'180분','150,000원','옥주현','뮤지컬','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'웃는 남자','세종문화회관',to_date('2022-06-10 21:00','yyyy-mm-dd hh24:mi'),'180분','150,000원','박효신','뮤지컬','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'May, Be','신한pLay스퀘어',to_date('2022-04-29 19:00','yyyy-mm-dd hh24:mi'),'120분','990,000원','케이시','콘서트','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'May, Be','신한pLay',to_date('2022-04-29 19:00','yyyy-mm-dd hh24:mi'),'120분','990,000원','케이시','콘서트','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'재즈페스티벌','올림픽공원',to_date('2022-05-27 13:00','yyyy-mm-dd hh24:mi'),'540분','165,000원','백예린','콘서트','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'라스트 세션','대학로 1관',to_date('2022-03-20 20:00','yyyy-mm-dd hh24:mi'),'90분','50,000원','신구','연극','10');
 INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'쉬어매드니스','서울 대학로',to_date('2022-05-31 15:00','yyyy-mm-dd hh24:mi'),'110분','35,000원','방모씨','연극','10');
-INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'해적','예술의전당 오페라극장',to_date('2022-04-20 19:00','yyyy-mm-dd hh24:mi'),'120분','30,000원','국립발레단','무용','10');
+INSERT INTO PERFORMANCE VALUES(seq_perno.nextval,'해적','예술의전당',to_date('2022-04-20 19:00','yyyy-mm-dd hh24:mi'),'120분','30,000원','국립발레단','무용','10');
 UPDATE PERFORMANCE SET per_seat=0 WHERE per_no = 1;
 DELETE FROM PERFORMANCE WHERE per_no = 1;
 
