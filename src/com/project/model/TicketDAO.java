@@ -50,7 +50,7 @@ public class TicketDAO {
 			pst.setString(1, mem_id);
 			pst.setString(2, mem_pw);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				mem = ticketlist.memInfo(rs);
 			}
 		} catch (SQLException e) {
@@ -70,7 +70,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TITLE);
 			pst.setString(1, title);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
@@ -80,7 +80,8 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
-	//제목별 (NULL확인)
+
+	// 제목별 (NULL확인)
 	public int selectPer_TitleInt(String title) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -95,7 +96,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+
 	// 3-2. 카테고리별 조회
 	public List<PerformanceVO> selectPer_Cat(String category) {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
@@ -104,7 +105,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_CAT);
 			pst.setString(1, category);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
@@ -114,7 +115,8 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
-	//카테고리별 (NULL확인)
+
+	// 카테고리별 (NULL확인)
 	public int selectPer_CatInt(String category) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -137,7 +139,7 @@ public class TicketDAO {
 		try {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_ALL);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
@@ -147,7 +149,8 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
-	//전체 (NULL확인)
+
+	// 전체 (NULL확인)
 	public int selectAllInt() {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -162,7 +165,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+
 	// 3-4 예매가능한 공연만 보기
 	public List<PerformanceVO> selectPossible() {
 		List<PerformanceVO> perlist = new ArrayList<PerformanceVO>();
@@ -170,7 +173,7 @@ public class TicketDAO {
 		try {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_POSSIBLE);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				perlist.add(ticketlist.perlist(rs));
 			}
 		} catch (SQLException e) {
@@ -180,7 +183,8 @@ public class TicketDAO {
 		}
 		return perlist;
 	}
-	//예매가능 (NULL확인)
+
+	// 예매가능 (NULL확인)
 	public int selectPossibleInt() {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -194,7 +198,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+
 	// 3-5. 관심리스트 추가 (조건 확인)
 	// 조건확인
 	public int wishlistInsertSearch(WishlistVO wish, String id, int per_no) {
@@ -212,7 +216,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//관심리스트 추가
+
+	// 관심리스트 추가
 	public int wishlistInsert(WishlistVO wish) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -238,7 +243,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_FOR_BUY);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				wishperlist.add(ticketlist.wishperlist(rs));
 			}
 		} catch (SQLException e) {
@@ -249,7 +254,8 @@ public class TicketDAO {
 		}
 		return wishperlist;
 	}
-	//관심리스트 (NULL확인)
+
+	// 관심리스트 (NULL확인)
 	public int selectWish_Forbuy_Int(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -264,9 +270,9 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+
 	// 4-2. insert, update(좌석-1, See->Y)
-	//insert
+	// insert
 	public int ticketInsert(TicketVO ticket) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -281,7 +287,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//per_no가져오기(update_seat)
+
+	// per_no가져오기(update_seat)
 	public int ticSeatSelect(int wish_no) {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
@@ -289,7 +296,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_TICKET_SELECT_PER);
 			pst.setInt(1, wish_no);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				per_no = rs.getInt("PER_NO");
 			}
 		} catch (SQLException e) {
@@ -299,7 +306,8 @@ public class TicketDAO {
 		}
 		return per_no;
 	}
-	//update_seat
+
+	// update_seat
 	public int ticSeatUpdate(PerformanceVO tic_seat, int per_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -314,7 +322,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//update_wish
+
+	// update_wish
 	public int ticWishUpdate(WishlistVO tic_wish, int wish_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -348,7 +357,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//비밀번호 수정
+
+	// 비밀번호 수정
 	public int pwUpdate(MemberVO mem, String id, String pw) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -373,7 +383,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_TICKET_BUY);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				ticperlist.add(ticketlist.ticperlist(rs));
 			}
 		} catch (SQLException e) {
@@ -384,7 +394,8 @@ public class TicketDAO {
 		}
 		return ticperlist;
 	}
-	//예매 확인 (NULL확인)
+
+	// 예매 확인 (NULL확인)
 	public int selectTicketBuyInt(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -399,7 +410,7 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
+
 	// 5-3. 예매 취소 -> 가능 조회
 	public List<TicketWishPerVO> selectTicketDel(String id) {
 		List<TicketWishPerVO> ticperlist = new ArrayList<>();
@@ -408,7 +419,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_DELETE_TICKET_SEARCH);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				ticperlist.add(ticketlist.ticperlist(rs));
 			}
 		} catch (SQLException e) {
@@ -419,7 +430,8 @@ public class TicketDAO {
 		}
 		return ticperlist;
 	}
-	//예매 취소 (NULL확인)
+
+	// 예매 취소 (NULL확인)
 	public int selectTicketDelInt(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -450,7 +462,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//wish_no가져오기
+
+	// wish_no가져오기
 	public int ticDelWishno(int tic_no) {
 		int wish_no = 0;
 		conn = DBUtil.getConnection();
@@ -458,10 +471,10 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISHNO_TICNO);
 			pst.setInt(1, tic_no);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				wish_no = rs.getInt(1);
 			}
-			System.out.println("wish_no: "+ wish_no);
+			System.out.println("wish_no: " + wish_no);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -469,7 +482,8 @@ public class TicketDAO {
 		}
 		return wish_no;
 	}
-	//update_wish
+
+	// update_wish
 	public int ticDelUpdateWish(int wish_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -484,8 +498,8 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	
-	//per_no가져오기
+
+	// per_no가져오기
 	public int ticDelPerno(int wish_no) {
 		int per_no = 0;
 		conn = DBUtil.getConnection();
@@ -493,7 +507,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_PERNO_WISHNO);
 			pst.setInt(1, wish_no);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				per_no = rs.getInt(1);
 			}
 		} catch (SQLException e) {
@@ -503,7 +517,8 @@ public class TicketDAO {
 		}
 		return per_no;
 	}
-	//update_seat
+
+	// update_seat
 	public int ticDelUpdateSeat(int per_no) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -527,7 +542,7 @@ public class TicketDAO {
 			pst = conn.prepareStatement(TicketSQL.SQL_SELECT_WISH_MYPAGE);
 			pst.setString(1, id);
 			rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				wishperlist.add(ticketlist.wishperlist(rs));
 			}
 		} catch (SQLException e) {
@@ -538,7 +553,8 @@ public class TicketDAO {
 		}
 		return wishperlist;
 	}
-	//관심리스트 (NULL확인)
+
+	// 관심리스트 (NULL확인)
 	public int selectWish_mypageInt(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -556,7 +572,7 @@ public class TicketDAO {
 
 	// 5-5. 로그아웃 id = null
 	// 5-6. 회원탈퇴
-	//탈퇴 가능 확인
+	// 탈퇴 가능 확인
 	public int selectMemDel(String id) {
 		int result = 0;
 		conn = DBUtil.getConnection();
@@ -571,8 +587,9 @@ public class TicketDAO {
 		}
 		return result;
 	}
-	//pw입력 다시입력 후 id, pw확인
-	public int selectMemPWDel (String id, String pw) {
+
+	// pw입력 다시입력 후 id, pw확인
+	public int selectMemPWDel(String id, String pw) {
 		int result = 0;
 		conn = DBUtil.getConnection();
 		try {
